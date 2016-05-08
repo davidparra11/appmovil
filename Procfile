@@ -1,1 +1,1 @@
- web: node web.jse
+ web: node web.js
