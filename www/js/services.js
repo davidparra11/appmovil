@@ -6,29 +6,29 @@ angular.module('starter.services', [])
   // Some fake testing data
   var chats = [{
     id: 0,
-    name: 'Javier Beltran',
-    lastText: 'Gerente General',
-    face: 'img/javier.png'
+    name: 'Ben Sparrow',
+    lastText: 'You on your way?',
+    face: 'img/ben.png'
   }, {
     id: 1,
-    name: 'Danilo Betancourt',
-    lastText: 'Gerente de desarrollo',
-    face: 'img/danilo.png'
+    name: 'Max Lynx',
+    lastText: 'Hey, it\'s me',
+    face: 'img/max.png'
   }, {
     id: 2,
-    name: 'David Parra',
-    lastText: 'desarrollador',
-    face: 'img/david.png'
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'img/adam.jpg'
   }, {
     id: 3,
-    name: 'Juan Atheortua',
-    lastText: 'desarrollador',
-    face: 'img/juan.png'
+    name: 'Perry Governor',
+    lastText: 'Look at my mukluks!',
+    face: 'img/perry.png'
   }, {
     id: 4,
-    name: 'Angela',
-    lastText: 'Contratista Externa',
-    face: 'img/angela.png'
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'img/mike.png'
   }];
 
   return {
@@ -48,13 +48,3 @@ angular.module('starter.services', [])
     }
   };
 });
-
-
-
-///////////////////////////////////////////////////////////////////////////
-
-angular.module('directory.services', ['ngResource'])
-
-    .factory('Employees', function ($resource) {
-        return $resource('/employees/:employeeId/:data');
-    });

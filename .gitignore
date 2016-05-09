@@ -22,7 +22,7 @@
 # http://git-scm.com/docs/gitignore
 
 bower_components/
-node_modules/
+# node_modules/
 platforms/
 plugins/
 
