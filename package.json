@@ -4,6 +4,7 @@
   "description": "appmovil: An Answercpi project",
   "private": true,
   "dependencies": {
+    "mime-types": "^2.1.11",
     "express": "^4.13.4",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
