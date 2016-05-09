@@ -1,4 +1,3 @@
-
 Answercpi APP
 ===================
 
@@ -16,5 +15,9 @@ npm start
 ```
 
 La aplicacion actualmente correra en tu [localhost:5000](http://localhost:5000/).
+
+
+Tablero de trabajo [Trello.com](https://trello.com/b/M3qVdO19)
+
 
 
