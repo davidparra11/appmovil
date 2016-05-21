@@ -1,27 +1,24 @@
 <ion-view view-title="SAR Control de acceso">
   <ion-content class="padding"><br><br><br><br><br>
-  <CENTER><img ng-src="{{image}}"/></CENTER>
-      <div class="list list-inset">
-          <label class="item item-input">
+    <CENTER><img ng-src="{{image}}"/></CENTER>
+    <div class="list list-inset">
+      <label class="item item-input">
         <input type="text" placeholder="Escriba su usuario" ng-model="user.name">
       </label>
       <label class="item item-input">
         <input type="password" placeholder="Escriba su contraseña" ng-model="user.password">
       </label>
     </div>
-      </div>
-      <button class="button button-block button-positive" ng-click="login(user)">Continuar</button>
+    </div>
+    <button class="button button-block button-positive" ng-click="login(user)">Continuar</button>
   </ion-content>
   <ion-searchbar
     ngModel="myInput"
     hideCancelButton="shouldHideCancel"
     input="onInput()"
     cancel="onCancel()">
-    </ion-searchbar>
+  </ion-searchbar>
 </ion-view>
-
-
-
 
 
 <!-- <div class="list list-inset">

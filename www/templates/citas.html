@@ -2,25 +2,26 @@
   <ion-content class="padding">
 
     <div class="list list-inset">
-  <label class="item item-input">
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" placeholder="Buscar" ng-model="searchBox" >
-  </label>
-</div>
-    
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Buscar" ng-model="searchBox">
+      </label>
+    </div>
 
-     <div class="list" ng-controller="InsideCtrl">
 
-    <a class="item item-thumbnail-left" ng-repeat="chat in chats | filter:searchBox" href="#/menu/detalles/{{chat.id}}">
-      <img src="{{chat.face}}">
-      <h2>Nombre: {{chat.name}}</h2>
-        <p>Identificacion: {{chat.identificacion}}</p>      
-      <p>Sexo: {{chat.sexo}}</p>
-      <p>Tipo de cita:</p>
-    </a>    
+    <div class="list" ng-controller="InsideCtrl">
 
-  </div>
+      <a class="item item-thumbnail-left" ng-repeat="chat in chats | filter:searchBox"
+         href="#/menu/detalles/{{chat.id}}">
+        <img src="{{chat.face}}">
+        <h2>Nombre: {{chat.name}}</h2>
+        <p>Identificacion: {{chat.identificacion}}</p>
+        <p>Sexo: {{chat.sexo}}</p>
+        <p>Tipo de cita:</p>
+      </a>
 
- 
+    </div>
+
+
   </ion-content>
 </ion-view>
