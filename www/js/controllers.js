@@ -5,34 +5,36 @@ angular.module('starter.controllers', [])
     AuthService.logout();
     $state.go('login');
   };
- 
+
   $scope.performValidRequest = function() {
     $http.get('http://localhost:5000/valid').then(
       function(result) {
         $scope.response = result;
       });
   };
- 
+
   $scope.performUnauthorizedRequest = function() {
     $http.get('http://localhost:5000/notauthorized').then(
       function(result) {
         // No result here..
-      }, function(err) {
+      },
+      function(err) {
         $scope.response = err;
       });
   };
- 
+
   $scope.performInvalidRequest = function() {
     $http.get('http://localhost:5000/notauthenticated').then(
       function(result) {
         // No result here..
-      }, function(err) {
+      },
+      function(err) {
         $scope.response = err;
       });
   };
 
   $scope.performGetRequest = function() {
-   /* $http.get('http://httpbin.org/get').then(
+    /* $http.get('http://httpbin.org/get').then(
       function(result) {
         // No result here..
         console.log(JSON.stringify(result));
@@ -42,27 +44,29 @@ angular.module('starter.controllers', [])
       });
   };*/
 
-  $http({
-  method: 'GET',
-  url: 'https://placego-rest.herokuapp.com/users/',
-  headers: {
-   'Content-Type': undefined,
-   'token': 'key123'
- },
- data: { test: 'test' }
-}).then(function successCallback(response) {
-    // this callback will be called asynchronously
-    // when the response is available
-    $scope.response = response;
-    console.log(response);
-  }, function errorCallback(response) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-    $scope.response = response;
-  });
+    $http({
+      method: 'GET',
+      url: 'https://placego-rest.herokuapp.com/users/',
+      headers: {
+        'Content-Type': undefined,
+        'token': 'key123'
+      },
+      data: {
+        test: 'test'
+      }
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+      $scope.response = response;
+      console.log(response);
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      $scope.response = response;
+    });
 
 
-};
+  };
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
@@ -80,36 +84,139 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+.controller('RegisterCtrl', function($scope, AuthService, $ionicPopup, $state) {
+  $scope.user = {
+    name: '',
+    password: ''
+  };
+ 
+  $scope.signup = function() {
+    AuthService.register($scope.user).then(function(msg) {
+      $state.go('outside.login');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register success!',
+        template: msg
+      });
+    }, function(errMsg) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register failed!',
+        template: errMsg
+      });
+    });
+  };
+})
+
+
+
+.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Chats) {
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
+  $scope.chats = Chats.all();
+
+  $scope.destroySession = function() {
+    AuthService.logout();
+  };
+
+  $scope.getInfo = function() {
+    $http.get(API_ENDPOINT.url + '/get').then(function(result) {
+      //$scope.memberinfo = result.data.msg;
+      $scope.memberinfo = result;
+
+    });
+  };
+
+  $scope.logout = function() {
+    AuthService.logout();
+    $state.go('outside.login');
+  };
+})
+
+.controller('DetallesCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
-  $scope.username = AuthService.username();
- 
-  $scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
-    var alertPopup = $ionicPopup.alert({
-      title: 'Unauthorized!',
-      template: 'You are not allowed to access this resource.'
-    });
-  });
- 
-  $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+.controller('CitasCtrl', function($scope, $stateParams, Chats) {
+  //$scope.chat = Chats.get($stateParams.chatId);
+ // $state.go('inside.citas');
+})
+
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, AuthService, Chats) {
+  //$scope.chat = Chats.get($stateParams.chatId);
+ // $state.go('inside.citas');
+ $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
+  $scope.logout = function() {
     AuthService.logout();
     $state.go('login');
+  };
+
+})
+
+.controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
+
+  $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+    AuthService.logout();
+    $state.go('outside.login');
     var alertPopup = $ionicPopup.alert({
       title: 'Session Lost!',
       template: 'Sorry, You have to login again.'
     });
   });
+  /* $scope.username = AuthService.username();
  
-  $scope.setCurrentUsername = function(name) {
-    $scope.username = name;
-  };
+   $scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
+     var alertPopup = $ionicPopup.alert({
+       title: 'Unauthorized!',
+       template: 'You are not allowed to access this resource.'
+     });
+   });
+ 
+   $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+     AuthService.logout();
+     $state.go('login');
+     var alertPopup = $ionicPopup.alert({
+       title: 'Session Lost!',
+       template: 'Sorry, You have to login again.'
+     });
+   });
+ 
+   $scope.setCurrentUsername = function(name) {
+     $scope.username = name;
+   };
+   */
 })
 
-.controller('LoginCtrl', function($scope, $state, $ionicPopup, AuthService) {
-  $scope.data = {};
+.controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService) {
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $scope.user = {
+    name: '',
+    password: ''
+  };
+ $scope.image = "../img/photo1.jpg";
+  $scope.login = function(user) {
+
+ 
+   // alert(JSON.stringify(user));
+    AuthService.login($scope.user).then(function(msg) {
+      $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+      $state.go('menu.citas');
+    }, function(errMsg) {
+      alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Login failed!',
+        template: errMsg
+      });
+    });
+  };
+  /*$scope.data = {};
   $scope.image = "../img/photo1.jpg";
  
   $scope.login = function(data) {
@@ -122,13 +229,5 @@ angular.module('starter.controllers', [])
         template: 'Usuario o contraseña incorrecta!'
       });
     });
-  };
-})
-
-
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+  };*/
 });
