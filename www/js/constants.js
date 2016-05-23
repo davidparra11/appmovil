@@ -12,6 +12,6 @@ angular.module('starter')
 
 
 .constant('API_ENDPOINT', {
-  url: 'http://httpbin.org'
+  url: 'http://desarrollo.sarcontrolacceso.com/api/example/users/'
   //  For a simulator use: url: 'http://127.0.0.1:8080/api'
 });
