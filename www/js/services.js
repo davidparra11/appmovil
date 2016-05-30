@@ -52,12 +52,74 @@ angular.module('starter.services', [])
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
+  
+  var buscar = function(user) {
+    var reqBuscarEmpresa = {
+    method: 'POST',
+    url: API_ENDPOINT.url,
+    headers: {
+      
+    },
+    data: {
+      usuario: user.usuario
+    }
+  }
+
+  var reqEmpresa = {
+    method: 'POST',
+    url: API_ENDPOINT.urlEmpresa,
+    headers: {
+      
+    },
+    data: {
+      usuario: user.usuario
+    }
+  }
+  //result.data[0].usuario == user.usuario
+    return $q(function(resolve, reject) {
+      console.log('user ' +  JSON.stringify(user));
+      // alert('loging buton');
+      $http(reqBuscarEmpresa).then(function(result) {
+       // alert('result. user ' + JSON.stringify(result.data[0]));
+        console.log('result usuario ' + JSON.stringify(result));
+        console.log('result data usuario ' + JSON.stringify(result.data.usuario));
+        if (result.data.usuario == user.usuario) {
+
+          $http(reqEmpresa).then(function(result) {
+       // alert('result. user ' + JSON.stringify(result.data[0]));
+        console.log('result usuario Empresa ' + JSON.stringify(result.data));
+        console.log('result data usuario Empresa ' + JSON.stringify(result.status));
+        if (result.status == 201) {
+
+
+           console.log('OK' + JSON.stringify(result.data));
+
+
+
+         // storeUserCredentials(result.data.token);
+          resolve(result.data);
+        } else {
+          reject(result.data.msg);
+        }
+      });
+
+
+
+         // storeUserCredentials(result.data.token);
+         // resolve(result.data.msg);
+        } else {
+          reject(result.data.msg);
+        }
+      });
+    });
+  }
+
 
   var req = {
     method: 'GET',
     url: API_ENDPOINT.url,
     headers: {
-      'id': '1'
+      'id': ''
     },
     data: {
       test: 'test'
@@ -67,12 +129,12 @@ angular.module('starter.services', [])
   //var login = function(name, pw) {
   var login = function(user) {
     return $q(function(resolve, reject) {
-      console.log('user ' + user);
+      console.log('user ' +  JSON.stringify(user));
       // alert('loging buton');
       $http(req).then(function(result) {
-        alert('result. ' + JSON.stringify(result));
-        console.log('result ' + JSON.stringify(result))
-        if (result.data.json.name == "admin") {
+        alert('result. ' + JSON.stringify(result.data[0]));
+        console.log('result ' + JSON.stringify(result.data[0]))
+        if (result.data[0].id_empresa == user.password) {
           storeUserCredentials(result.data.token);
           resolve(result.data.msg);
         } else {
@@ -80,6 +142,9 @@ angular.module('starter.services', [])
         }
       });
     });
+
+
+   
     /* return $q(function(resolve, reject) {
      if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
      // Make a request and receive your auth token from your server
@@ -90,6 +155,9 @@ angular.module('starter.services', [])
      }
      });*/
   }
+
+   
+
 
   var logout = function() {
     destroyUserCredentials();
@@ -107,6 +175,7 @@ angular.module('starter.services', [])
   return {
     login: login,
     logout: logout,
+    buscar: buscar,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
@@ -133,39 +202,52 @@ angular.module('starter.services', [])
   $httpProvider.interceptors.push('AuthInterceptor');
 })
 
+/*
+.factory('CitasService', function($resource) {
+  return {
+    responseError: function(response) {
+      $rootScope.$broadcast({
+        401: AUTH_EVENTS.notAuthenticated,
+        403: AUTH_EVENTS.notAuthorized
+      }[response.status], response);
+      return $q.reject(response);
+    }
+  };
+})*/
+
 
 
 /**/
-.factory('Chats', function() {
+.factory('Chats', function($http, API_ENDPOINT) {
   // Might use a resource here that returns a JSON array
-
+    
   // Some fake testing data
   var chats = [{
     id: 0,
     name: 'Javier Beltran',
     identificacion: '19497896',
     face: 'img/javier.png',
-    sexo: 'Masculino'
+    sexo: prueba
   }, {
     id: 1,
     name: 'Danilo Betancourt',
     identificacion: '9870680',
     face: 'img/danilo.png',
-    sexo: 'Masculino'
+    sexo: prueba
 
   }, {
     id: 2,
     name: 'David Parra',
     identificacion: '1088309083',
     face: 'img/david.png',
-    sexo: 'Masculino'
+    sexo: prueba
 
   }, {
     id: 3,
     name: 'Juan Atheortua',
     identificacion: '1039451685',
     face: 'img/juan.png',
-    sexo: 'Masculino'
+    sexo: prueba
 
   }, {
     id: 4,
@@ -179,7 +261,7 @@ angular.module('starter.services', [])
     name: 'Roosvel Guinald',
     identificacion: '89009950',
     face: 'img/roosvel.png',
-    sexo: 'Masculino'
+    sexo: prueba
 
   }, {
     id: 6,
