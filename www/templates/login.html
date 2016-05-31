@@ -1,16 +1,29 @@
 <ion-view view-title="SAR Control de acceso">
   <ion-content class="padding"><br><br><br><br><br>
     <CENTER><img ng-src="{{image}}"/></CENTER>
+     
     <div class="list list-inset">
-      <label class="item item-input">
-        <input type="text" placeholder="Escriba su usuario" ng-model="user.name">
+      <li class="item" ng-hide="usuarioLi">
+      {{user.usuario}}
+      </li>
+      <label class="item item-input" ng-hide="usuarioLabel">
+        <input type="text" placeholder="Escriba su usuario" ng-model="user.usuario" ng-hide="usuarioInput">
       </label>
-      <label class="item item-input">
-        <input type="password" placeholder="Escriba su contraseña" ng-model="user.password">
+      <label class="item item-input item-select" ng-hide="empresaInput" >        
+        <input type="text" placeholder="{{user.empresa}}Seleccione una empresa" ng-model="user.empresa" ng-hide="empresaInput">
+        <select name="verificarPassword" id="verificarPassword" ng-model="user.empresa">
+          <option ng-repeat="option in user.empresas" value="{{option.nombre}}">{{option.nombre}}</option>
+        </select>
+      </label>
+      <label class="item item-input"  ng-hide="passwordLabel">
+        <input type="password" placeholder="Escriba su contraseña" ng-model="user.password"  ng-disabled="passwordInput" >
       </label>
     </div>
     </div>
-    <button class="button button-block button-positive" ng-click="login(user)">Continuar</button>
+      <button class="button button-block button-positive" ng-click="login(user)" ng-hide="entrarBtn">Entrar</button>
+      <button class="button button-block button-positive" ng-click="buscarEmpresa(user)" ng-hide="continuarBtn">Continuar</button>
+      <button class="button button-block button-stable" ng-click="limpiar(user)" ng-hide="limpiarBtn">Entrar con usuario diferente</button>
+      
   </ion-content>
   <ion-searchbar
     ngModel="myInput"
