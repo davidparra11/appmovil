@@ -4,6 +4,7 @@
   "description": "answercpiapp: An answer project",
   "dependencies": {
     "angular-mocks": "^1.5.5",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
