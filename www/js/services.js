@@ -89,7 +89,7 @@ angular.module('starter.services', [])
        // alert('result. user ' + JSON.stringify(result.data[0]));
         console.log('result usuario Empresa ' + JSON.stringify(result.data));
         console.log('result data usuario Empresa ' + JSON.stringify(result.status));
-        if (result.status == 201) {
+        if (result.status == 200) {
 
 
            console.log('OK' + JSON.stringify(result.data));

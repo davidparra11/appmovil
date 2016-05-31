@@ -12,6 +12,7 @@ angular.module('starter')
 
 .constant('API_ENDPOINT', {
   url: 'http://desarrollo.sarcontrolacceso.com/api/example/users/',
-  urlEmpresa: 'http://desarrollo.sarcontrolacceso.com/api/example/empresa/'
+  urlEmpresa: 'http://desarrollo.sarcontrolacceso.com/api/example/empresa/',
+  urlVerificar: 'http://desarrollo.sarcontrolacceso.com/api/example/verificar/'
   //  For a simulator use: url: 'http://127.0.0.1:8080/api'
 });

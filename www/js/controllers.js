@@ -183,7 +183,7 @@ angular.module('starter.controllers', [])
   $ionicHistory.nextViewOptions({
     disableBack: true
   });
-  $scope.myVar = true;
+  $scope.empresaInput = true;
   $scope.user = {
     name: '',
     password: ''
@@ -209,7 +209,7 @@ angular.module('starter.controllers', [])
 
    $scope.buscarEmpresa = function(user) {
 
-     $scope.myVar = false;
+     $scope.empresaInput = false;
     // alert(JSON.stringify(user));
     AuthService.buscar($scope.user).then(function(msg) {
       $ionicHistory.nextViewOptions({
@@ -217,7 +217,7 @@ angular.module('starter.controllers', [])
       });
 
      console.log('OK 2 msg' + JSON.stringify(msg));
-     $scope.user.empresa = msg;
+     $scope.user.empresas = msg;
      // $state.go('menu.citas');
     }, function(errMsg) {
      // alert(JSON.stringify(errMsg));
