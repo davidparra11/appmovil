@@ -180,49 +180,97 @@ angular.module('starter.controllers', [])
 })
 
 .controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService) {
+   
   $ionicHistory.nextViewOptions({
     disableBack: true
   });
+
+  $scope.limpiarBtn = true;
   $scope.empresaInput = true;
+  $scope.passwordLabel = true;
+  $scope.entrarBtn = true;
+  $scope.passwordInput = true;
+  $scope.usuarioLi = true;
+  $scope.usuarioLabel = false;
+  
   $scope.user = {
     name: '',
     password: ''
   };
   $scope.image = "../img/photo1.jpg";
-  $scope.login = function(user) {
+  //$scope.option = '';
+  
 
+  $scope.login = function(user) {
+    if (user.empresa == null || user.empresa == '') {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Falta el campo Empresa'
+      });
+      return false;
+
+    }
 
     // alert(JSON.stringify(user));
     AuthService.login($scope.user).then(function(msg) {
       $ionicHistory.nextViewOptions({
         disableBack: true
       });
-      $state.go('menu.citas');
-    }, function(errMsg) {
-      alert(JSON.stringify(errMsg));
+       
+
+
+
+      //$state.go('menu.citas');
       var alertPopup = $ionicPopup.alert({
-        title: 'Login failed!',
+        title: 'Hola, Bienvenido a Answercpi!',
+        template: msg
+      });
+
+      $scope.empresaInput = true;
+     $scope.passwordLabel = true;
+     $scope.entrarBtn = true;
+     $scope.continuarBtn = false;
+     $scope.passwordInput = true;
+     $scope.usuarioLi = true;
+     $scope.usuarioLabel = false;
+     $scope.limpiarBtn = true;
+
+      $state.go('menu.citas');
+
+    }, function(errMsg) {
+     // alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! Por favor verifique usuario o contraseña',
         template: errMsg
       });
     });
   };
 
-   $scope.buscarEmpresa = function(user) {
+   $scope.buscarEmpresa = function(user, state) {
 
-     $scope.empresaInput = false;
+    // $scope.empresaInput = state;
     // alert(JSON.stringify(user));
     AuthService.buscar($scope.user).then(function(msg) {
       $ionicHistory.nextViewOptions({
         disableBack: true
       });
+      $scope.empresaInput = state;
 
      console.log('OK 2 msg' + JSON.stringify(msg));
      $scope.user.empresas = msg;
      // $state.go('menu.citas');
+     $scope.limpiarBtn = false;
+     $scope.usuarioLabel = true;
+     $scope.usuarioLi = false;
+     $scope.empresaInput = false;
+     $scope.passwordLabel = false;
+     $scope.entrarBtn = false;
+     $scope.continuarBtn = true;
+     $scope.passwordInput = false;
     }, function(errMsg) {
+      $scope.empresaInput = true;
      // alert(JSON.stringify(errMsg));
       var alertPopup = $ionicPopup.alert({
-        title: 'Login failed!',
+        title: 'Usuario inexistente!',
         template: errMsg
       });
     });
@@ -241,4 +289,22 @@ angular.module('starter.controllers', [])
    });
    });
    };*/
+
+
+   $scope.limpiar = function(user) {
+    user.usuario = '';
+    user.password = '';
+    user.empresa = '';
+
+    $scope.limpiarBtn = true;
+      $scope.empresaInput = true;
+     $scope.passwordLabel = true;
+     $scope.entrarBtn = true;
+     $scope.continuarBtn = false;
+     $scope.passwordInput = true;
+     $scope.usuarioLi = true;
+     $scope.usuarioLabel = false;
+
+
+  };
 });

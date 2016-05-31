@@ -52,61 +52,62 @@ angular.module('starter.services', [])
     window.localStorage.removeItem(LOCAL_TOKEN_KEY);
   }
 
-  
+
   var buscar = function(user) {
     var reqBuscarEmpresa = {
-    method: 'POST',
-    url: API_ENDPOINT.url,
-    headers: {
-      
-    },
-    data: {
-      usuario: user.usuario
-    }
-  }
+      method: 'POST',
+      url: API_ENDPOINT.url,
+      headers: {
 
-  var reqEmpresa = {
-    method: 'POST',
-    url: API_ENDPOINT.urlEmpresa,
-    headers: {
-      
-    },
-    data: {
-      usuario: user.usuario
+      },
+      data: {
+        usuario: user.usuario
+      }
     }
-  }
-  //result.data[0].usuario == user.usuario
+
+    var reqEmpresa = {
+        method: 'POST',
+        url: API_ENDPOINT.urlEmpresa,
+        headers: {
+
+        },
+        data: {
+          usuario: user.usuario
+        }
+      }
+      //result.data[0].usuario == user.usuario
     return $q(function(resolve, reject) {
-      console.log('user ' +  JSON.stringify(user));
+      console.log('user ' + JSON.stringify(user));
       // alert('loging buton');
       $http(reqBuscarEmpresa).then(function(result) {
-       // alert('result. user ' + JSON.stringify(result.data[0]));
-        console.log('result usuario ' + JSON.stringify(result));
-        console.log('result data usuario ' + JSON.stringify(result.data.usuario));
-        if (result.data.usuario == user.usuario) {
-
+        // alert('result. user ' + JSON.stringify(result.data[0]));
+        console.log('result usuario ' + JSON.stringify(result.data.length));
+        //console.log('result data usuario ' + JSON.stringify(result.data[0].id_empresa_persona));
+        if (result.data.length !== 0) {
+          //state = false;
+          user.id_empresa_persona = result.data[0].id_empresa_persona;
           $http(reqEmpresa).then(function(result) {
-       // alert('result. user ' + JSON.stringify(result.data[0]));
-        console.log('result usuario Empresa ' + JSON.stringify(result.data));
-        console.log('result data usuario Empresa ' + JSON.stringify(result.status));
-        if (result.status == 200) {
+            // alert('result. user ' + JSON.stringify(result.data[0]));
+            console.log('result usuario Empresa ' + JSON.stringify(result.data));
+            console.log('result data usuario Empresa ' + JSON.stringify(result.status));
+            if (result.status == 200) {
 
 
-           console.log('OK' + JSON.stringify(result.data));
-
-
-
-         // storeUserCredentials(result.data.token);
-          resolve(result.data);
-        } else {
-          reject(result.data.msg);
-        }
-      });
+              console.log('OK' + JSON.stringify(result.data));
 
 
 
-         // storeUserCredentials(result.data.token);
-         // resolve(result.data.msg);
+              // storeUserCredentials(result.data.token);
+              resolve(result.data);
+            } else {
+              reject(result.data.msg);
+            }
+          });
+
+
+
+          // storeUserCredentials(result.data.token);
+          // resolve(result.data.msg);
         } else {
           reject(result.data.msg);
         }
@@ -114,29 +115,39 @@ angular.module('starter.services', [])
     });
   }
 
-
-  var req = {
-    method: 'GET',
-    url: API_ENDPOINT.url,
-    headers: {
-      'id': ''
-    },
-    data: {
-      test: 'test'
-    }
-  }
 
   //var login = function(name, pw) {
   var login = function(user) {
+
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlVerificar,
+      headers: {
+        'id': ''
+      },
+      data: {
+        usuario: user.usuario,
+        id_empresa_persona: user.id_empresa_persona,
+        password: user.password
+
+      }
+    }
+
+
+
     return $q(function(resolve, reject) {
-      console.log('user ' +  JSON.stringify(user));
+      console.log('user ' + JSON.stringify(user));
       // alert('loging buton');
       $http(req).then(function(result) {
-        alert('result. ' + JSON.stringify(result.data[0]));
-        console.log('result ' + JSON.stringify(result.data[0]))
-        if (result.data[0].id_empresa == user.password) {
+        // alert('result. ' + JSON.stringify(result.data[0]));
+        console.log('Entrar result ' + JSON.stringify(result))
+        if (result.data == true) {
           storeUserCredentials(result.data.token);
           resolve(result.data.msg);
+          user.usuario = '';
+          user.empresa = '';
+          user.password = '';
+          user.id_empresa_persona = '';
         } else {
           reject(result.data.msg);
         }
@@ -144,7 +155,7 @@ angular.module('starter.services', [])
     });
 
 
-   
+
     /* return $q(function(resolve, reject) {
      if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
      // Make a request and receive your auth token from your server
@@ -156,7 +167,6 @@ angular.module('starter.services', [])
      });*/
   }
 
-   
 
 
   var logout = function() {
@@ -176,6 +186,7 @@ angular.module('starter.services', [])
     login: login,
     logout: logout,
     buscar: buscar,
+    // state: state,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
@@ -220,34 +231,34 @@ angular.module('starter.services', [])
 /**/
 .factory('Chats', function($http, API_ENDPOINT) {
   // Might use a resource here that returns a JSON array
-    
+
   // Some fake testing data
   var chats = [{
     id: 0,
     name: 'Javier Beltran',
     identificacion: '19497896',
     face: 'img/javier.png',
-    sexo: prueba
+    sexo: 'masculino'
   }, {
     id: 1,
     name: 'Danilo Betancourt',
     identificacion: '9870680',
     face: 'img/danilo.png',
-    sexo: prueba
+    sexo: 'masculino'
 
   }, {
     id: 2,
     name: 'David Parra',
     identificacion: '1088309083',
     face: 'img/david.png',
-    sexo: prueba
+    sexo: 'masculino'
 
   }, {
     id: 3,
     name: 'Juan Atheortua',
     identificacion: '1039451685',
     face: 'img/juan.png',
-    sexo: prueba
+    sexo: 'masculino'
 
   }, {
     id: 4,
@@ -261,7 +272,7 @@ angular.module('starter.services', [])
     name: 'Roosvel Guinald',
     identificacion: '89009950',
     face: 'img/roosvel.png',
-    sexo: prueba
+    sexo: 'masculino'
 
   }, {
     id: 6,
