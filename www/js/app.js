@@ -54,7 +54,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       })
       .state('menu.detalles', {
-        url: '/detalles/:chatId',
+        url: '/detalles/:personaId',
         views: {
           'contenido': {
             templateUrl: 'templates/detalles.html',

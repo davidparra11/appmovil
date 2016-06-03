@@ -11,12 +11,12 @@
 
     <div class="list" ng-controller="InsideCtrl">
 
-      <a class="item item-thumbnail-left" ng-repeat="chat in chats | filter:searchBox"
-         href="#/menu/detalles/{{chat.id}}">
-        <img src="{{chat.face}}">
-        <h2>Nombre: {{chat.name}}</h2>
-        <p>Identificacion: {{chat.identificacion}}</p>
-        <p>Sexo: {{chat.sexo}}</p>
+      <a class="item item-thumbnail-left" ng-repeat="persona in personas | filter:searchBox"
+         href="#/menu/detalles/{{persona.id}}">
+        <img src="{{persona.face}}">
+        <h2>Nombre: {{persona.name}}</h2>
+        <p>Identificacion: {{persona.identificacion}}</p>
+        <p>Sexo: {{persona.sexo}}</p>
         <p>Tipo de cita:</p>
       </a>
 

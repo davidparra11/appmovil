@@ -59,12 +59,12 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Chats) {
+.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Personas) {
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
 
-  $scope.chats = Chats.all();
+  $scope.personas = Personas.all();
 
   $scope.destroySession = function() {
     AuthService.logout();
@@ -84,12 +84,12 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('DetallesCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('DetallesCtrl', function($scope, $stateParams, Personas) {
+  $scope.persona = Personas.get($stateParams.personaId);
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, AuthService, Chats) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, AuthService, Personas) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
   $scope.toggleLeft = function() {
