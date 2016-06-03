@@ -28,19 +28,7 @@ angular.module('starter.services', [])
 
     // Set the token as header for your requests!
     $http.defaults.headers.common.Authorization = authToken;
-    /* username = token.split('.')[0];
-     isAuthenticated = true;
-     authToken = token;
-
-     if (username == 'admin') {
-     role = USER_ROLES.admin
-     }
-     if (username == 'user') {
-     role = USER_ROLES.public
-     }
-
-     // Set the token as header for your requests!
-     $http.defaults.headers.common['X-Auth-Token'] = token;*/
+   
   }
 
   function destroyUserCredentials() {
@@ -104,10 +92,6 @@ angular.module('starter.services', [])
             }
           });
 
-
-
-          // storeUserCredentials(result.data.token);
-          // resolve(result.data.msg);
         } else {
           reject(result.data.msg);
         }
@@ -137,9 +121,7 @@ angular.module('starter.services', [])
 
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
-      // alert('loging buton');
       $http(req).then(function(result) {
-        // alert('result. ' + JSON.stringify(result.data[0]));
         console.log('Entrar result ' + JSON.stringify(result))
         if (result.data == true) {
           storeUserCredentials(result.data.token);
@@ -154,17 +136,6 @@ angular.module('starter.services', [])
       });
     });
 
-
-
-    /* return $q(function(resolve, reject) {
-     if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
-     // Make a request and receive your auth token from your server
-     storeUserCredentials(name + '.yourServerToken');
-     resolve('Login success.');
-     } else {
-     reject('Login Failed.');
-     }
-     });*/
   }
 
 
@@ -186,13 +157,10 @@ angular.module('starter.services', [])
     login: login,
     logout: logout,
     buscar: buscar,
-    // state: state,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
     },
-    // username: function() {return username;},
-    // role: function() {return role;}
   };
 })
 
@@ -213,27 +181,11 @@ angular.module('starter.services', [])
   $httpProvider.interceptors.push('AuthInterceptor');
 })
 
-/*
-.factory('CitasService', function($resource) {
-  return {
-    responseError: function(response) {
-      $rootScope.$broadcast({
-        401: AUTH_EVENTS.notAuthenticated,
-        403: AUTH_EVENTS.notAuthorized
-      }[response.status], response);
-      return $q.reject(response);
-    }
-  };
-})*/
-
-
-
-/**/
-.factory('Chats', function($http, API_ENDPOINT) {
+.factory('Personas', function($http, API_ENDPOINT) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var chats = [{
+  var personas = [{
     id: 0,
     name: 'Javier Beltran',
     identificacion: '19497896',
@@ -285,15 +237,15 @@ angular.module('starter.services', [])
 
   return {
     all: function() {
-      return chats;
+      return personas;
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
+    remove: function(persona) {
+      personas.splice(personas.indexOf(persona), 1);
     },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    get: function(personaId) {
+      for (var i = 0; i < personas.length; i++) {
+        if (personas[i].id === parseInt(personaId)) {
+          return personas[i];
         }
       }
       return null;
