@@ -138,6 +138,72 @@ angular.module('starter.services', [])
 
   }
 
+  var buscarPersona = function(user) {
+    console.log('on buscarPersona ' + JSON.stringify(user));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlPersonas,
+      headers: {
+        'id': ''
+      },
+      data: {
+        usuario: user.identifier,
+        id_empresa: '1'
+      }
+    }
+
+
+
+    return $q(function(resolve, reject) {
+      console.log('user en buscarPersona ' + JSON.stringify(user));
+      $http(req).then(function(result) {
+        console.log('Entrar result ' + JSON.stringify(result));
+        console.log('Entrar result id_empresa ' + JSON.stringify(result.data.id_empresa));
+        if (result.data.id_empresa) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+          
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+
+
+  var buscarTipoCita = function(user) {
+    console.log('on buscarPersona ' + JSON.stringify(user));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlTipocita,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_tipo_cita: '2'
+      }
+    }
+
+
+
+    return $q(function(resolve, reject) {
+      console.log('buscarTipoCita ' + JSON.stringify(user));
+      $http(req).then(function(result) {
+        console.log('Entrar buscarTipoCita result ' + JSON.stringify(result))
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+          
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
 
 
   var logout = function() {
@@ -157,6 +223,8 @@ angular.module('starter.services', [])
     login: login,
     logout: logout,
     buscar: buscar,
+    buscarPersona: buscarPersona,
+    buscarTipoCita: buscarTipoCita,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
@@ -179,6 +247,23 @@ angular.module('starter.services', [])
 
 .config(function($httpProvider) {
   $httpProvider.interceptors.push('AuthInterceptor');
+})
+
+.factory("usuario", function(){
+    var infoUsuario = [];
+    var identificacionUser = '';
+    var id_empresa = '';
+
+    var interfaz = {
+        user_id: identificacionUser,
+        getDescargas: function(){
+            return infoUsuario;
+        },
+        nuevaDescarga: function(descarga){
+            infoUsuario.push(descarga);
+        }
+    }
+    return interfaz;
 })
 
 .factory('Personas', function($http, API_ENDPOINT) {

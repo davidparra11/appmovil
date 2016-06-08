@@ -1,6 +1,59 @@
 <ion-view title="Citas">
   <ion-content class="padding">
 
+    <div class="list">
+
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Identificacion" ng-model="user.identifier">
+        </label>
+        <button class="button button-small" ng-click="identificacion(user)">
+          Buscar
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="list card" ng-hide="personaCard">
+
+        <div class="item item-avatar">
+          <img src="http://desarrollo.sarcontrolacceso.com/{{usuario.foto}}">
+          <h2>{{usuario.nombre_completo}}</h2>
+          <p>Identificacion: {{usuario.identificacion}}</p>
+          <p>Sexo: {{usuario.sexo}}</p>
+        </div>
+
+       
+       <div class="item item-body">
+
+        <label class="item item-input item-select" ng-hide="tipoCitaLabel" >Tipo de citas:       
+        <input type="text" placeholder=" {{citas.nombre}} Seleccione un tipo" ng-model="citas.nombre" ng-hide="tipoCitaInput">
+        <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
+          <option ng-repeat="cita in citas" value="{{cita.nombre}}">{{cita.nombre}}</option>
+        </select>
+      </label>
+        
+      </label>
+      <label class="item item-input item-select" >Dependiencia:
+        <input type="text" placeholder=" Seleccione una opcion" > 
+        <select name="verificarPassword" id="verificarPassword" >
+          <option value="option-1">Option 1</option>
+      <option value="option-2">Option 2</option>
+        </select>
+      </label>
+      <br>
+          <p>
+            <a href="#" class="subdued">0 Agendas</a>
+            <a href="#" class="subdued">0 Citas</a>
+          </p>
+        </div>
+
+    </div>
+
+
+
+
     <div class="list list-inset">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
@@ -17,7 +70,7 @@
         <h2>Nombre: {{persona.name}}</h2>
         <p>Identificacion: {{persona.identificacion}}</p>
         <p>Sexo: {{persona.sexo}}</p>
-        <p>Número de citas:</p>
+        <p>Número de citas: 0</p>
       </a>
 
     </div>

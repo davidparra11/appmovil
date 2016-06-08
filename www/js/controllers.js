@@ -60,6 +60,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Personas) {
+
+
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
@@ -89,9 +91,58 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, AuthService, Personas) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, AuthService, Personas) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
+  $scope.personaCard = true;
+
+  $scope.identificacion = function(usuario) {
+    console.log('test on identificacion' + usuario.identifier);
+    /*  var alertPopup = $ionicPopup.alert({
+        title: usuario.identifier
+      });*/
+      //return false;
+       AuthService.buscarPersona(usuario).then(function(msg) {
+      console.log('fuciono buscarPersona ' + JSON.stringify(msg));
+
+      $scope.personaCard = false;
+
+  
+      console.log('msg ' + JSON.stringify(msg));
+
+      $scope.usuario = msg;
+
+      AuthService.buscarTipoCita().then(function(res) {
+      console.log('fuciono buscarPersona ' + JSON.stringify(res));
+
+      
+
+      console.log('msg ' + JSON.stringify(res));
+
+
+      $scope.citas = res;
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay fucionarios para este tipo de cita',
+        template: errMsg
+      });
+    });
+
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      $scope.personaCard = true;
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! Por favor verifique usuario',
+        template: errMsg
+      });
+    });
+
+    
+  };
+
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
