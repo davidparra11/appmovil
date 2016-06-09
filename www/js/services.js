@@ -182,7 +182,7 @@ angular.module('starter.services', [])
         'id': ''
       },
       data: {
-        id_tipo_cita: '2'
+        id_empresa: '1'
       }
     }
 
@@ -191,7 +191,73 @@ angular.module('starter.services', [])
     return $q(function(resolve, reject) {
       console.log('buscarTipoCita ' + JSON.stringify(user));
       $http(req).then(function(result) {
-        console.log('Entrar buscarTipoCita result ' + JSON.stringify(result))
+        console.log('Entrar buscarTipoCita result ' + JSON.stringify(result));
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+          
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+
+  var buscarCitas = function(citas) {
+    console.log('on buscarCitas ' + JSON.stringify(citas));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlCitas,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_empresa: '1',
+        identificacion: '9870680'
+      }
+    }
+
+
+
+    return $q(function(resolve, reject) {
+      console.log('buscarTipoCita ' + JSON.stringify(citas));
+      $http(req).then(function(result) {
+        console.log('Entrar buscarCitas result ' + JSON.stringify(result));
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+          
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+
+
+  var buscarDependencia = function(citas) {
+    console.log('on buscarCitas ' + JSON.stringify(citas));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlDependencia,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_tipo_cita: '2'
+      }
+    }
+
+
+
+    return $q(function(resolve, reject) {
+      console.log('buscarDependencia ' + JSON.stringify(citas));
+      $http(req).then(function(result) {
+        console.log('Entrar buscarDependencia result ' + JSON.stringify(result));
         if (result.status == 200) {
           //storeUserCredentials(result.data);
           resolve(result.data);
@@ -225,6 +291,8 @@ angular.module('starter.services', [])
     buscar: buscar,
     buscarPersona: buscarPersona,
     buscarTipoCita: buscarTipoCita,
+    buscarCitas: buscarCitas,
+    buscarDependencia: buscarDependencia,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;

@@ -113,14 +113,31 @@ angular.module('starter.controllers', [])
       $scope.usuario = msg;
 
       AuthService.buscarTipoCita().then(function(res) {
-      console.log('fuciono buscarPersona ' + JSON.stringify(res));
-
-      
+      console.log('fuciono buscarTipoCita ' + JSON.stringify(res));
 
       console.log('msg ' + JSON.stringify(res));
 
-
       $scope.citas = res;
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay fucionarios para este tipo de cita',
+        template: errMsg
+      });
+    });
+
+
+
+      AuthService.buscarCitas().then(function(response) {
+      console.log('fuciono buscarCitas ' + JSON.stringify(response));
+
+      
+
+      console.log('response ' + JSON.stringify(response));
+
+
+      $scope.citasLista = response[0];
 
     }, function(errMsg) {
       // alert(JSON.stringify(errMsg));
@@ -142,6 +159,24 @@ angular.module('starter.controllers', [])
 
     
   };
+
+  $scope.buscarDependencia = function() {
+       // $scope.count++;
+       AuthService.buscarDependencia().then(function(res) {
+      console.log('fuciono buscarPersona ' + JSON.stringify(res));
+
+      console.log('msg ' + JSON.stringify(res));
+
+      $scope.dependencias = res;
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay fucionarios para este tipo de cita',
+        template: errMsg
+      });
+    });
+      };
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();

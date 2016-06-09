@@ -27,27 +27,45 @@
        
        <div class="item item-body">
 
-        <label class="item item-input item-select" ng-hide="tipoCitaLabel" >Tipo de citas:       
-        <input type="text" placeholder=" {{citas.nombre}} Seleccione un tipo" ng-model="citas.nombre" ng-hide="tipoCitaInput">
-        <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
-          <option ng-repeat="cita in citas" value="{{cita.nombre}}">{{cita.nombre}}</option>
-        </select>
-      </label>
-        
-      </label>
-      <label class="item item-input item-select" >Dependiencia:
-        <input type="text" placeholder=" Seleccione una opcion" > 
-        <select name="verificarPassword" id="verificarPassword" >
-          <option value="option-1">Option 1</option>
-      <option value="option-2">Option 2</option>
-        </select>
-      </label>
-      <br>
-          <p>
-            <a href="#" class="subdued">0 Agendas</a>
-            <a href="#" class="subdued">0 Citas</a>
-          </p>
+              <label class="item item-input item-select" ng-hide="tipoCitaLabel" >Tipo de citas:       
+              <input type="text" placeholder=" {{citas.nombre}} Seleccione un tipo" ng-model="citas.nombre" ng-change="buscarDependencia()" ng-hide="tipoCitaInput">
+              <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
+                <option ng-repeat="cita in citas" value="{{cita.nombre}}">{{cita.nombre}}</option>
+              </select>
+            </label>
+
+            <label class="item item-input item-select" ng-hide="dependenciaLabel" >Dependiencia:       
+              <input type="text" placeholder=" {{dependencias.nombre}} Seleccione un tipo" ng-model="dependencias.nombre" ng-hide="dependenciaInput">
+              <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
+                <option ng-repeat="dependencia in dependencias" value="{{dependencia.nombre}}">{{dependencia.nombre}}</option>
+              </select>
+            </label>
+            
+            <br>
+                <p>
+                  <a href="#" class="subdued">0 Agendas</a>
+                  <a href="#" class="subdued">0 Citas</a>
+                </p>
         </div>
+
+    <div class="item item-body">
+        <p>
+          #: {{citasLista.id_asignacion_cita
+          }}
+        </p>
+        <p>Fecha: {{citasLista.fecha}} </p>
+        <p>Hora: {{citasLista.hora}}</p>
+        <p>Reserva: {{citasLista.clave_reserva}}</p>
+        <p>Tipo de cita: {{citasLista.tipo_cita}}</p>
+        <p>Departamento: {{citasLista.nombre}}</p>
+        <p>Piso: {{citasLista.piso}}</p>
+        <p>Numero: {{citasLista.numero}}</p>
+        <p>Funcionario: {{citasLista.nombre_completo}}</p>
+        
+          <a href="#" class="subdued">Cancelar cita</a>
+          
+        </p>
+    </div>
 
     </div>
 
