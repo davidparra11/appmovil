@@ -59,32 +59,6 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Personas) {
-
-
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
-
-  $scope.personas = Personas.all();
-
-  $scope.destroySession = function() {
-    AuthService.logout();
-  };
-
-  $scope.getInfo = function() {
-    $http.get(API_ENDPOINT.url + '/get').then(function(result) {
-      //$scope.memberinfo = result.data.msg;
-      $scope.memberinfo = result;
-
-    });
-  };
-
-  $scope.logout = function() {
-    AuthService.logout();
-    $state.go('outside.login');
-  };
-})
 
 .controller('DetallesCtrl', function($scope, $stateParams, Personas) {
   $scope.persona = Personas.get($stateParams.personaId);
@@ -106,6 +80,7 @@ angular.module('starter.controllers', [])
       console.log('fuciono buscarPersona ' + JSON.stringify(msg));
 
       $scope.personaCard = false;
+      $scope.infoCitaCard = true;
 
   
       console.log('msg ' + JSON.stringify(msg));
@@ -151,6 +126,7 @@ angular.module('starter.controllers', [])
     }, function(errMsg) {
       // alert(JSON.stringify(errMsg));
       $scope.personaCard = true;
+      $scope.infoCitaCard = false;
       var alertPopup = $ionicPopup.alert({
         title: 'Error! Por favor verifique usuario',
         template: errMsg

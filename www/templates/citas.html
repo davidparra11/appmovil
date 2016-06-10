@@ -14,6 +14,21 @@
 
     </div>
 
+    <div class="list card">
+
+  
+
+  <div class="item item-body" ng-hide="infoCitaCard">
+  
+    <p>
+      Digite el número de su identificación para que pueda verificar la información de su cita o para que
+      pueda agendar una.
+    </p>
+    
+  </div>
+
+
+
 
     <div class="list card" ng-hide="personaCard">
 
@@ -69,29 +84,6 @@
 
     </div>
 
-
-
-
-    <div class="list list-inset">
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Buscar" ng-model="searchBox">
-      </label>
-    </div>
-
-
-    <div class="list" ng-controller="InsideCtrl">
-
-      <a class="item item-thumbnail-left" ng-repeat="persona in personas | filter:searchBox"
-         href="#/menu/detalles/{{persona.id}}">
-        <img src="{{persona.face}}">
-        <h2>Nombre: {{persona.name}}</h2>
-        <p>Identificacion: {{persona.identificacion}}</p>
-        <p>Sexo: {{persona.sexo}}</p>
-        <p>Número de citas: 0</p>
-      </a>
-
-    </div>
 
 
   </ion-content>
