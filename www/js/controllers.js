@@ -69,59 +69,62 @@ angular.module('starter.controllers', [])
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
   $scope.personaCard = true;
+  $scope.numeroCitas = 0;
+
 
   $scope.identificacion = function(usuario) {
     console.log('test on identificacion' + usuario.identifier);
     /*  var alertPopup = $ionicPopup.alert({
         title: usuario.identifier
       });*/
-      //return false;
-       AuthService.buscarPersona(usuario).then(function(msg) {
+    //return false;
+    var id_empresa_global = UsuarioGlobal.get();
+    AuthService.buscarPersona(usuario, id_empresa_global).then(function(msg) {
       console.log('fuciono buscarPersona ' + JSON.stringify(msg));
 
       $scope.personaCard = false;
       $scope.infoCitaCard = true;
-      var test = UsuarioGlobal.get();
-  
+
+
       console.log('msg ' + JSON.stringify(msg));
-      console.log('test ' + JSON.stringify(test));
+      console.log('test ' + JSON.stringify(id_empresa_global));
 
       $scope.usuario = msg;
 
-      AuthService.buscarTipoCita(test).then(function(res) {
-      console.log('fuciono buscarTipoCita ' + JSON.stringify(res));
+      AuthService.buscarTipoCita(id_empresa_global).then(function(res) {
+        console.log('fuciono buscarTipoCita ' + JSON.stringify(res));
 
-      console.log('msg ' + JSON.stringify(res));
+        console.log('msg ' + JSON.stringify(res));
 
-      $scope.citas = res;
+        $scope.citas = res;
 
-    }, function(errMsg) {
-      // alert(JSON.stringify(errMsg));
-      var alertPopup = $ionicPopup.alert({
-        title: 'Error! No hay fucionarios para este tipo de cita',
-        template: errMsg
+      }, function(errMsg) {
+        // alert(JSON.stringify(errMsg));
+        var alertPopup = $ionicPopup.alert({
+          title: 'Error! No hay fucionarios para este tipo de cita',
+          template: errMsg
+        });
       });
-    });
 
 
 
-      AuthService.buscarCitas().then(function(response) {
-      console.log('fuciono buscarCitas ' + JSON.stringify(response));
+      AuthService.buscarCitas(usuario, id_empresa_global).then(function(response) {
+        console.log('fuciono buscarCitas ' + JSON.stringify(response));
 
-      
+        $scope.numeroCitas = response.length;
 
-      console.log('response ' + JSON.stringify(response));
+        console.log('response ' + JSON.stringify(response));
 
 
-      $scope.citasLista = response[0];
+        $scope.citasLista = response[0];
 
-    }, function(errMsg) {
-      // alert(JSON.stringify(errMsg));
-      var alertPopup = $ionicPopup.alert({
-        title: 'Error! No hay fucionarios para este tipo de cita',
-        template: errMsg
+      }, function(errMsg) {
+        // alert(JSON.stringify(errMsg));
+        var alertPopup = $ionicPopup.alert({
+          title: 'Error! No hay fucionarios para este tipo de cita',
+          template: errMsg
+        });
       });
-    });
 
 
     }, function(errMsg) {
@@ -134,13 +137,13 @@ angular.module('starter.controllers', [])
       });
     });
 
-    
+
   };
 
-  $scope.buscarDependencia = function(cita) {
-       // $scope.count++;
-       console.log('CITA ' + JSON.stringify(cita));
-       AuthService.buscarDependencia().then(function(res) {
+  $scope.buscarDependencia = function(idCita) {
+    // $scope.count++;
+    console.log('CITA ' + JSON.stringify(idCita));
+    AuthService.buscarDependencia(idCita).then(function(res) {
       console.log('fuciono buscarPersona ' + JSON.stringify(res));
 
       console.log('msg ' + JSON.stringify(res));
@@ -148,13 +151,13 @@ angular.module('starter.controllers', [])
       $scope.dependencias = res;
 
     }, function(errMsg) {
-      // alert(JSON.stringify(errMsg));
+
       var alertPopup = $ionicPopup.alert({
         title: 'Error! No hay fucionarios para este tipo de cita',
         template: errMsg
       });
     });
-      };
+  };
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
@@ -162,6 +165,7 @@ angular.module('starter.controllers', [])
 
   $scope.logout = function() {
     AuthService.logout();
+    UsuarioGlobal.remove();
     $state.go('login');
   };
 
@@ -177,7 +181,7 @@ angular.module('starter.controllers', [])
       template: 'Sorry, You have to login again.'
     });
   });
- 
+
 })
 
 .controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService, UsuarioGlobal) {
@@ -200,7 +204,7 @@ angular.module('starter.controllers', [])
   };
   $scope.image = "../img/photo1.jpg";
   //$scope.option = '';
-    $scope.buscarEmpresa = function(user, state) {
+  $scope.buscarEmpresa = function(user, state) {
 
     AuthService.buscar($scope.user).then(function(msg) {
       $ionicHistory.nextViewOptions({
@@ -235,7 +239,7 @@ angular.module('starter.controllers', [])
       return false;
 
     }
-   // console.log('option ' + JSON.stringify($scope.option.nombre));
+    // console.log('option ' + JSON.stringify($scope.option.nombre));
     AuthService.login($scope.user).then(function(msg) {
       console.log('metiendo al arraay ' + JSON.stringify($scope.user.empresa));
       $ionicHistory.nextViewOptions({
@@ -270,7 +274,7 @@ angular.module('starter.controllers', [])
   };
 
 
- //Usuario
+  //Usuario
   $scope.limpiar = function(user) {
     user.usuario = '';
     user.password = '';

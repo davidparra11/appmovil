@@ -28,7 +28,7 @@ angular.module('starter.services', [])
 
     // Set the token as header for your requests!
     $http.defaults.headers.common.Authorization = authToken;
-   
+
   }
 
   function destroyUserCredentials() {
@@ -53,17 +53,6 @@ angular.module('starter.services', [])
       }
     }
 
-    var reqEmpresa = {
-        method: 'POST',
-        url: API_ENDPOINT.urlEmpresa,
-        headers: {
-
-        },
-        data: {
-          usuario: user.usuario
-        }
-      }
-      //result.data[0].usuario == user.usuario
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
       // alert('loging buton');
@@ -76,24 +65,6 @@ angular.module('starter.services', [])
           user.id_empresa_persona = result.data[0].id_empresa_persona;
           //user.id_empresa = result.data[0].id_empresa;
           resolve(result.data);
-          /*$http(reqEmpresa).then(function(result) {
-            // alert('result. user ' + JSON.stringify(result.data[0]));
-            console.log('result usuario Empresa ' + JSON.stringify(result.data));
-            console.log('result data usuario Empresa ' + JSON.stringify(result.status));
-            if (result.status == 200) {
-
-
-              console.log('OK' + JSON.stringify(result.data));
-
-
-
-              // storeUserCredentials(result.data.token);
-              resolve(result.data);
-            } else {
-              reject(result.data.msg);
-            }
-          });*/
-
         } else {
           reject(result.data.msg);
         }
@@ -119,18 +90,16 @@ angular.module('starter.services', [])
       }
     }
 
-
-    console.log('id_empresa cuando se logie sucess 1: ' + JSON.stringify(user.empresa));
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
       $http(req).then(function(result) {
-        console.log('Entrar result ' + JSON.stringify(result))
+        console.log('Entrar result ' + JSON.stringify(result));
         if (result.data == true) {
           storeUserCredentials(result.data.token);
           console.log('id_empresa cuando se logie sucess 2 ' + JSON.stringify(user.empresa));
           resolve(result.data.msg);
           user.usuario = '';
-         // user.empresa = '';
+          // user.empresa = '';
           user.password = '';
           user.id_empresa_persona = '';
         } else {
@@ -141,8 +110,7 @@ angular.module('starter.services', [])
 
   }
 
-  var buscarPersona = function(user) {
-    console.log('on buscarPersona ' + JSON.stringify(user));
+  var buscarPersona = function(user, id_empresa) {
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlPersonas,
@@ -151,12 +119,9 @@ angular.module('starter.services', [])
       },
       data: {
         usuario: user.identifier,
-        id_empresa: '1'
+        id_empresa: id_empresa
       }
     }
-
-
-
     return $q(function(resolve, reject) {
       console.log('user en buscarPersona ' + JSON.stringify(user));
       $http(req).then(function(result) {
@@ -165,7 +130,7 @@ angular.module('starter.services', [])
         if (result.data.id_empresa) {
           //storeUserCredentials(result.data);
           resolve(result.data);
-          
+
         } else {
           reject(result.data);
         }
@@ -174,10 +139,8 @@ angular.module('starter.services', [])
 
   }
 
-
-
-  var buscarTipoCita = function(data) {
-    console.log('on buscarPersona data: ' + JSON.stringify(data));
+  var buscarTipoCita = function(id_empresa_usuario) {
+    console.log('on buscarPersona data: ' + JSON.stringify(id_empresa_usuario));
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlTipocita,
@@ -185,19 +148,16 @@ angular.module('starter.services', [])
         'id': ''
       },
       data: {
-        id_empresa: data
+        id_empresa: id_empresa_usuario
       }
     }
-
-
-
     return $q(function(resolve, reject) {
       $http(req).then(function(result) {
         console.log('Entrar buscarTipoCita result ' + JSON.stringify(result));
         if (result.status == 200) {
           //storeUserCredentials(result.data);
           resolve(result.data);
-          
+
         } else {
           reject(result.data);
         }
@@ -206,9 +166,8 @@ angular.module('starter.services', [])
 
   }
 
-
-  var buscarCitas = function(citas) {
-    console.log('on buscarCitas ' + JSON.stringify(citas));
+  var buscarCitas = function(user, id_empresa_persona) {
+    console.log('on buscarCitas ' + JSON.stringify(user));
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlCitas,
@@ -216,21 +175,17 @@ angular.module('starter.services', [])
         'id': ''
       },
       data: {
-        id_empresa: '1',
-        identificacion: '9870680'
+        id_empresa: '1', //esta quemado por que es el unico que recupera citas.
+        identificacion: user.identifier
       }
     }
-
-
-
     return $q(function(resolve, reject) {
-      console.log('buscarTipoCita ' + JSON.stringify(citas));
       $http(req).then(function(result) {
-        console.log('Entrar buscarCitas result ' + JSON.stringify(result));
+        console.log('Entrar buscarCitas result ' + JSON.stringify(result.data.length));
         if (result.status == 200) {
           //storeUserCredentials(result.data);
           resolve(result.data);
-          
+
         } else {
           reject(result.data);
         }
@@ -239,10 +194,8 @@ angular.module('starter.services', [])
 
   }
 
-
-
-  var buscarDependencia = function(citas) {
-    console.log('on buscarCitas ' + JSON.stringify(citas));
+  var buscarDependencia = function(tipoCita) {
+    console.log('on buscarCitas ' + JSON.stringify(tipoCita));
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlDependencia,
@@ -250,20 +203,17 @@ angular.module('starter.services', [])
         'id': ''
       },
       data: {
-        id_tipo_cita: '2'
+        id_tipo_cita: tipoCita
       }
     }
-
-
-
     return $q(function(resolve, reject) {
-      console.log('buscarDependencia ' + JSON.stringify(citas));
+      console.log('buscarDependencia ' + JSON.stringify(tipoCita));
       $http(req).then(function(result) {
         console.log('Entrar buscarDependencia result ' + JSON.stringify(result));
         if (result.status == 200) {
           //storeUserCredentials(result.data);
           resolve(result.data);
-          
+
         } else {
           reject(result.data);
         }
@@ -319,24 +269,24 @@ angular.module('starter.services', [])
   $httpProvider.interceptors.push('AuthInterceptor');
 })
 
-.factory("UsuarioGlobal", function(){
-    var infoUsuario = [];
-    var identificacionUser = '';
-    var id_empresa = '';
+.factory("UsuarioGlobal", function() {
+  var infoUsuario = [];
+  var identificacionUser = '';
+  var id_empresa = '';
 
-   /* var interfaz = {
-        user_id: identificacionUser,
-        getDescargas: function(){
-            return infoUsuario;
-        },
-        nuevaDescarga: function(descarga){
-            infoUsuario.push(descarga);
-            id_empresa = descarga;
-        }
-    }
-    return interfaz;*/
+  /* var interfaz = {
+       user_id: identificacionUser,
+       getDescargas: function(){
+           return infoUsuario;
+       },
+       nuevaDescarga: function(descarga){
+           infoUsuario.push(descarga);
+           id_empresa = descarga;
+       }
+   }
+   return interfaz;*/
 
-    return {
+  return {
     add: function(data) {
       id_empresa = data;
       infoUsuario.push(data);
@@ -344,7 +294,7 @@ angular.module('starter.services', [])
     get: function() {
       return id_empresa;
     },
-    remove: function(){
+    remove: function() {
       id_empresa = '';
     }
   };
