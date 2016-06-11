@@ -43,9 +43,9 @@
        <div class="item item-body">
 
               <label class="item item-input item-select" ng-hide="tipoCitaLabel" >Tipo de citas:       
-              <input type="text" placeholder=" {{citas.nombre}} Seleccione un tipo" ng-model="citas.nombre" ng-change="buscarDependencia()" ng-hide="tipoCitaInput">
-              <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
-                <option ng-repeat="cita in citas" value="{{cita.nombre}}">{{cita.nombre}}</option>
+              <input type="text" placeholder=" {{citas.nombre}} Seleccione un tipo" ng-model="citas.nombre" ng-change="buscarDependencia(citas.id_tipo_cita)" ng-hide="tipoCitaInput">
+              <select name="tipoCita" id="tipoCita" ng-model="citas.id_tipo_cita">
+                <option ng-repeat="cita in citas" value="{{cita.id_tipo_cita}}">{{cita.descripcion}}</option>
               </select>
             </label>
 

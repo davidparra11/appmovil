@@ -65,7 +65,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, AuthService, Personas) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, AuthService, Personas, UsuarioGlobal) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
   $scope.personaCard = true;
@@ -81,13 +81,14 @@ angular.module('starter.controllers', [])
 
       $scope.personaCard = false;
       $scope.infoCitaCard = true;
-
+      var test = UsuarioGlobal.get();
   
       console.log('msg ' + JSON.stringify(msg));
+      console.log('test ' + JSON.stringify(test));
 
       $scope.usuario = msg;
 
-      AuthService.buscarTipoCita().then(function(res) {
+      AuthService.buscarTipoCita(test).then(function(res) {
       console.log('fuciono buscarTipoCita ' + JSON.stringify(res));
 
       console.log('msg ' + JSON.stringify(res));
@@ -136,8 +137,9 @@ angular.module('starter.controllers', [])
     
   };
 
-  $scope.buscarDependencia = function() {
+  $scope.buscarDependencia = function(cita) {
        // $scope.count++;
+       console.log('CITA ' + JSON.stringify(cita));
        AuthService.buscarDependencia().then(function(res) {
       console.log('fuciono buscarPersona ' + JSON.stringify(res));
 
@@ -178,7 +180,7 @@ angular.module('starter.controllers', [])
  
 })
 
-.controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService) {
+.controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService, UsuarioGlobal) {
 
   $ionicHistory.nextViewOptions({
     disableBack: true
@@ -198,7 +200,32 @@ angular.module('starter.controllers', [])
   };
   $scope.image = "../img/photo1.jpg";
   //$scope.option = '';
+    $scope.buscarEmpresa = function(user, state) {
 
+    AuthService.buscar($scope.user).then(function(msg) {
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $scope.empresaInput = state;
+
+      console.log('OK 2 msg' + JSON.stringify(msg));
+      $scope.user.empresas = msg;
+      $scope.limpiarBtn = false;
+      $scope.usuarioLabel = true;
+      $scope.usuarioLi = false;
+      $scope.empresaInput = false;
+      $scope.passwordLabel = false;
+      $scope.entrarBtn = false;
+      $scope.continuarBtn = true;
+      $scope.passwordInput = false;
+    }, function(errMsg) {
+      $scope.empresaInput = true;
+      var alertPopup = $ionicPopup.alert({
+        title: 'Usuario inexistente!',
+        template: errMsg
+      });
+    });
+  };
 
   $scope.login = function(user) {
     if (user.empresa == null || user.empresa == '') {
@@ -208,11 +235,14 @@ angular.module('starter.controllers', [])
       return false;
 
     }
-
+   // console.log('option ' + JSON.stringify($scope.option.nombre));
     AuthService.login($scope.user).then(function(msg) {
+      console.log('metiendo al arraay ' + JSON.stringify($scope.user.empresa));
       $ionicHistory.nextViewOptions({
         disableBack: true
       });
+
+      UsuarioGlobal.add($scope.user.empresa);
 
       var alertPopup = $ionicPopup.alert({
         title: 'Hola, Bienvenido a Answercpi!',
@@ -239,33 +269,8 @@ angular.module('starter.controllers', [])
     });
   };
 
-  $scope.buscarEmpresa = function(user, state) {
 
-    AuthService.buscar($scope.user).then(function(msg) {
-      $ionicHistory.nextViewOptions({
-        disableBack: true
-      });
-      $scope.empresaInput = state;
-
-      console.log('OK 2 msg' + JSON.stringify(msg));
-      $scope.user.empresas = msg;
-      $scope.limpiarBtn = false;
-      $scope.usuarioLabel = true;
-      $scope.usuarioLi = false;
-      $scope.empresaInput = false;
-      $scope.passwordLabel = false;
-      $scope.entrarBtn = false;
-      $scope.continuarBtn = true;
-      $scope.passwordInput = false;
-    }, function(errMsg) {
-      $scope.empresaInput = true;
-      var alertPopup = $ionicPopup.alert({
-        title: 'Usuario inexistente!',
-        template: errMsg
-      });
-    });
-  };
- 
+ //Usuario
   $scope.limpiar = function(user) {
     user.usuario = '';
     user.password = '';

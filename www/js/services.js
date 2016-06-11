@@ -74,7 +74,9 @@ angular.module('starter.services', [])
         if (result.data.length !== 0) {
           //state = false;
           user.id_empresa_persona = result.data[0].id_empresa_persona;
-          $http(reqEmpresa).then(function(result) {
+          //user.id_empresa = result.data[0].id_empresa;
+          resolve(result.data);
+          /*$http(reqEmpresa).then(function(result) {
             // alert('result. user ' + JSON.stringify(result.data[0]));
             console.log('result usuario Empresa ' + JSON.stringify(result.data));
             console.log('result data usuario Empresa ' + JSON.stringify(result.status));
@@ -90,7 +92,7 @@ angular.module('starter.services', [])
             } else {
               reject(result.data.msg);
             }
-          });
+          });*/
 
         } else {
           reject(result.data.msg);
@@ -118,16 +120,17 @@ angular.module('starter.services', [])
     }
 
 
-
+    console.log('id_empresa cuando se logie sucess 1: ' + JSON.stringify(user.empresa));
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
       $http(req).then(function(result) {
         console.log('Entrar result ' + JSON.stringify(result))
         if (result.data == true) {
           storeUserCredentials(result.data.token);
+          console.log('id_empresa cuando se logie sucess 2 ' + JSON.stringify(user.empresa));
           resolve(result.data.msg);
           user.usuario = '';
-          user.empresa = '';
+         // user.empresa = '';
           user.password = '';
           user.id_empresa_persona = '';
         } else {
@@ -173,8 +176,8 @@ angular.module('starter.services', [])
 
 
 
-  var buscarTipoCita = function(user) {
-    console.log('on buscarPersona ' + JSON.stringify(user));
+  var buscarTipoCita = function(data) {
+    console.log('on buscarPersona data: ' + JSON.stringify(data));
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlTipocita,
@@ -182,14 +185,13 @@ angular.module('starter.services', [])
         'id': ''
       },
       data: {
-        id_empresa: '1'
+        id_empresa: data
       }
     }
 
 
 
     return $q(function(resolve, reject) {
-      console.log('buscarTipoCita ' + JSON.stringify(user));
       $http(req).then(function(result) {
         console.log('Entrar buscarTipoCita result ' + JSON.stringify(result));
         if (result.status == 200) {
@@ -317,22 +319,38 @@ angular.module('starter.services', [])
   $httpProvider.interceptors.push('AuthInterceptor');
 })
 
-.factory("usuario", function(){
+.factory("UsuarioGlobal", function(){
     var infoUsuario = [];
     var identificacionUser = '';
     var id_empresa = '';
 
-    var interfaz = {
+   /* var interfaz = {
         user_id: identificacionUser,
         getDescargas: function(){
             return infoUsuario;
         },
         nuevaDescarga: function(descarga){
             infoUsuario.push(descarga);
+            id_empresa = descarga;
         }
     }
-    return interfaz;
+    return interfaz;*/
+
+    return {
+    add: function(data) {
+      id_empresa = data;
+      infoUsuario.push(data);
+    },
+    get: function() {
+      return id_empresa;
+    },
+    remove: function(){
+      id_empresa = '';
+    }
+  };
 })
+
+
 
 .factory('Personas', function($http, API_ENDPOINT) {
   // Might use a resource here that returns a JSON array
