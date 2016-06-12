@@ -280,8 +280,6 @@ angular.module('starter.controllers', [])
     });
   };
 
-
-  //Usuario
   $scope.limpiar = function(user) {
     user.usuario = '';
     user.password = '';
@@ -295,7 +293,6 @@ angular.module('starter.controllers', [])
     $scope.passwordInput = true;
     $scope.usuarioLi = true;
     $scope.usuarioLabel = false;
-
 
   };
 });
