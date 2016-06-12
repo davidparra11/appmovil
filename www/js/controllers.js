@@ -59,45 +59,113 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state, $ionicSideMenuDelegate, Personas) {
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
-
-  $scope.personas = Personas.all();
-
-  $scope.destroySession = function() {
-    AuthService.logout();
-  };
-
-  $scope.getInfo = function() {
-    $http.get(API_ENDPOINT.url + '/get').then(function(result) {
-      //$scope.memberinfo = result.data.msg;
-      $scope.memberinfo = result;
-
-    });
-  };
-
-  $scope.logout = function() {
-    AuthService.logout();
-    $state.go('outside.login');
-  };
-})
 
 .controller('DetallesCtrl', function($scope, $stateParams, Personas) {
   $scope.persona = Personas.get($stateParams.personaId);
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, AuthService, Personas) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, AuthService, Personas, UsuarioGlobal) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
+  $scope.personaCard = true;
+  $scope.numeroCitas = 0;
+
+
+  $scope.identificacion = function(usuario) {
+    console.log('test on identificacion' + usuario.identifier);
+    /*  var alertPopup = $ionicPopup.alert({
+        title: usuario.identifier
+      });*/
+    //return false;
+    var id_empresa_global = UsuarioGlobal.get();
+    AuthService.buscarPersona(usuario, id_empresa_global).then(function(msg) {
+      console.log('fuciono buscarPersona ' + JSON.stringify(msg));
+
+      $scope.personaCard = false;
+      $scope.infoCitaCard = true;
+
+
+      console.log('msg ' + JSON.stringify(msg));
+      console.log('test ' + JSON.stringify(id_empresa_global));
+
+      $scope.usuario = msg;
+
+      AuthService.buscarTipoCita(id_empresa_global).then(function(res) {
+        console.log('fuciono buscarTipoCita ' + JSON.stringify(res));
+
+        console.log('msg ' + JSON.stringify(res));
+
+        $scope.citas = res;
+
+      }, function(errMsg) {
+        // alert(JSON.stringify(errMsg));
+        var alertPopup = $ionicPopup.alert({
+          title: 'Error! No hay fucionarios para este tipo de cita',
+          template: errMsg
+        });
+      });
+
+
+
+      AuthService.buscarCitas(usuario, id_empresa_global).then(function(response) {
+        console.log('fuciono buscarCitas ' + JSON.stringify(response));
+
+        $scope.numeroCitas = response.length;
+
+        console.log('response ' + JSON.stringify(response));
+
+
+        $scope.citasLista = response[0];
+
+      }, function(errMsg) {
+        // alert(JSON.stringify(errMsg));
+        var alertPopup = $ionicPopup.alert({
+          title: 'Error! No hay fucionarios para este tipo de cita',
+          template: errMsg
+        });
+      });
+
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      $scope.personaCard = true;
+      $scope.infoCitaCard = false;
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! Por favor verifique usuario',
+        template: errMsg
+      });
+    });
+
+
+  };
+
+  $scope.buscarDependencia = function(idCita) {
+    // $scope.count++;
+    console.log('CITA ' + JSON.stringify(idCita));
+    AuthService.buscarDependencia(idCita).then(function(res) {
+      console.log('fuciono buscarPersona ' + JSON.stringify(res));
+
+      console.log('msg ' + JSON.stringify(res));
+
+      $scope.dependencias = res;
+
+    }, function(errMsg) {
+
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay fucionarios para este tipo de cita',
+        template: errMsg
+      });
+    });
+  };
+
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
 
   $scope.logout = function() {
     AuthService.logout();
+    UsuarioGlobal.remove();
     $state.go('login');
   };
 
@@ -113,10 +181,10 @@ angular.module('starter.controllers', [])
       template: 'Sorry, You have to login again.'
     });
   });
- 
+
 })
 
-.controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService) {
+.controller('LoginCtrl', function($scope, $state, $ionicPopup, $ionicHistory, AuthService, UsuarioGlobal) {
 
   $ionicHistory.nextViewOptions({
     disableBack: true
@@ -136,47 +204,6 @@ angular.module('starter.controllers', [])
   };
   $scope.image = "../img/photo1.jpg";
   //$scope.option = '';
-
-
-  $scope.login = function(user) {
-    if (user.empresa == null || user.empresa == '') {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Falta el campo Empresa'
-      });
-      return false;
-
-    }
-
-    AuthService.login($scope.user).then(function(msg) {
-      $ionicHistory.nextViewOptions({
-        disableBack: true
-      });
-
-      var alertPopup = $ionicPopup.alert({
-        title: 'Hola, Bienvenido a Answercpi!',
-        template: msg
-      });
-
-      $scope.empresaInput = true;
-      $scope.passwordLabel = true;
-      $scope.entrarBtn = true;
-      $scope.continuarBtn = false;
-      $scope.passwordInput = true;
-      $scope.usuarioLi = true;
-      $scope.usuarioLabel = false;
-      $scope.limpiarBtn = true;
-
-      $state.go('menu.citas');
-
-    }, function(errMsg) {
-      // alert(JSON.stringify(errMsg));
-      var alertPopup = $ionicPopup.alert({
-        title: 'Error! Por favor verifique usuario o contraseña',
-        template: errMsg
-      });
-    });
-  };
-
   $scope.buscarEmpresa = function(user, state) {
 
     AuthService.buscar($scope.user).then(function(msg) {
@@ -203,7 +230,51 @@ angular.module('starter.controllers', [])
       });
     });
   };
- 
+
+  $scope.login = function(user) {
+    if (user.empresa == null || user.empresa == '') {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Falta el campo Empresa'
+      });
+      return false;
+
+    }
+    // console.log('option ' + JSON.stringify($scope.option.nombre));
+    AuthService.login($scope.user).then(function(msg) {
+      console.log('metiendo al arraay ' + JSON.stringify($scope.user.empresa));
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+
+      UsuarioGlobal.add($scope.user.empresa);
+
+      var alertPopup = $ionicPopup.alert({
+        title: 'Hola, Bienvenido a Answercpi!',
+        template: msg
+      });
+
+      $scope.empresaInput = true;
+      $scope.passwordLabel = true;
+      $scope.entrarBtn = true;
+      $scope.continuarBtn = false;
+      $scope.passwordInput = true;
+      $scope.usuarioLi = true;
+      $scope.usuarioLabel = false;
+      $scope.limpiarBtn = true;
+
+      $state.go('menu.citas');
+
+    }, function(errMsg) {
+      // alert(JSON.stringify(errMsg));
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! Por favor verifique usuario o contraseña',
+        template: errMsg
+      });
+    });
+  };
+
+
+  //Usuario
   $scope.limpiar = function(user) {
     user.usuario = '';
     user.password = '';

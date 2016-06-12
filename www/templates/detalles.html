@@ -8,19 +8,57 @@
   <ion-nav-back-button>
   </ion-nav-back-button>
   <ion-content class="padding">
-    <img ng-src="{{persona.face}}" style="width: 64px; height: 64px">
+
+  <div class="list card">
+
+  <div class="item item-avatar">
+    <img ng-src="{{persona.face}}">
+    <label class="item item-input item-select">Tipo de citas:
+        <input type="text" placeholder=" Seleccione una opcion" > 
+        <select name="verificarPassword" id="verificarPassword" >
+          <option value="option-1">Option 1</option>
+      <option value="option-2">Option 2</option>
+        </select><br>
+        
+      </label>
+      <label class="item item-input item-select" >Dependiencia:
+        <input type="text" placeholder=" Seleccione una opcion" > 
+        <select name="verificarPassword" id="verificarPassword" >
+          <option value="option-1">Option 1</option>
+      <option value="option-2">Option 2</option>
+        </select>
+      </label>
+  </div>
+
+
+
+
+
+
+  <div class="item item-body">
     <p>
-      {{persona.name}}
+      #: Sin citas
     </p>
     <p>Fecha: </p>
     <p>Hora: </p>
     <p>Reserva: </p>
     <p>Tipo de cita:</p>
-    <p>Identificacion: {{persona.identificacion}}</p>
-    <p>Sexo: {{persona.sexo}}</p>
-    <p>Tipo de cita:</p>
+    <p>Departamento: </p>
+    <p>Piso: </p>
+    <p>Numero: </p>
+    <p>Funcionario:</p>
+    
+      <a href="#" class="subdued">Cancelar cita</a>
+      
+    </p>
+  </div>
+
+</div>
+   
     <ion-list>
       <ion-item class="positive" ui-sref="menu.citas">Atrás</ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
+
+
