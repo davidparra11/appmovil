@@ -65,11 +65,16 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, AuthService, Personas, UsuarioGlobal) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, $ionicHistory, AuthService, Personas, UsuarioGlobal) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
   $scope.personaCard = true;
   $scope.numeroCitas = 0;
+
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+
 
 
   $scope.identificacion = function(usuario) {
@@ -165,6 +170,8 @@ angular.module('starter.controllers', [])
 
   $scope.logout = function() {
     AuthService.logout();
+    $ionicHistory.clearCache();
+    $ionicHistory.clearHistory();
     UsuarioGlobal.remove();
     $state.go('login');
   };

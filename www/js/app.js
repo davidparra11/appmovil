@@ -30,6 +30,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/menu',
         abstract: true,
         templateUrl: 'templates/menu.html',
+        cache: false,
         controller: 'MenuCtrl'
       })
       .state('login', {
