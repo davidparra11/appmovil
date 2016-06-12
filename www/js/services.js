@@ -28,19 +28,7 @@ angular.module('starter.services', [])
 
     // Set the token as header for your requests!
     $http.defaults.headers.common.Authorization = authToken;
-    /* username = token.split('.')[0];
-     isAuthenticated = true;
-     authToken = token;
 
-     if (username == 'admin') {
-     role = USER_ROLES.admin
-     }
-     if (username == 'user') {
-     role = USER_ROLES.public
-     }
-
-     // Set the token as header for your requests!
-     $http.defaults.headers.common['X-Auth-Token'] = token;*/
   }
 
   function destroyUserCredentials() {
@@ -65,17 +53,6 @@ angular.module('starter.services', [])
       }
     }
 
-    var reqEmpresa = {
-        method: 'POST',
-        url: API_ENDPOINT.urlEmpresa,
-        headers: {
-
-        },
-        data: {
-          usuario: user.usuario
-        }
-      }
-      //result.data[0].usuario == user.usuario
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
       // alert('loging buton');
@@ -86,28 +63,8 @@ angular.module('starter.services', [])
         if (result.data.length !== 0) {
           //state = false;
           user.id_empresa_persona = result.data[0].id_empresa_persona;
-          $http(reqEmpresa).then(function(result) {
-            // alert('result. user ' + JSON.stringify(result.data[0]));
-            console.log('result usuario Empresa ' + JSON.stringify(result.data));
-            console.log('result data usuario Empresa ' + JSON.stringify(result.status));
-            if (result.status == 200) {
-
-
-              console.log('OK' + JSON.stringify(result.data));
-
-
-
-              // storeUserCredentials(result.data.token);
-              resolve(result.data);
-            } else {
-              reject(result.data.msg);
-            }
-          });
-
-
-
-          // storeUserCredentials(result.data.token);
-          // resolve(result.data.msg);
+          //user.id_empresa = result.data[0].id_empresa;
+          resolve(result.data);
         } else {
           reject(result.data.msg);
         }
@@ -133,19 +90,16 @@ angular.module('starter.services', [])
       }
     }
 
-
-
     return $q(function(resolve, reject) {
       console.log('user ' + JSON.stringify(user));
-      // alert('loging buton');
       $http(req).then(function(result) {
-        // alert('result. ' + JSON.stringify(result.data[0]));
-        console.log('Entrar result ' + JSON.stringify(result))
+        console.log('Entrar result ' + JSON.stringify(result));
         if (result.data == true) {
           storeUserCredentials(result.data.token);
+          console.log('id_empresa cuando se logie sucess 2 ' + JSON.stringify(user.empresa));
           resolve(result.data.msg);
           user.usuario = '';
-          user.empresa = '';
+          // user.empresa = '';
           user.password = '';
           user.id_empresa_persona = '';
         } else {
@@ -154,17 +108,118 @@ angular.module('starter.services', [])
       });
     });
 
+  }
 
+  var buscarPersona = function(user, id_empresa) {
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlPersonas,
+      headers: {
+        'id': ''
+      },
+      data: {
+        usuario: user.identifier,
+        id_empresa: id_empresa
+      }
+    }
+    return $q(function(resolve, reject) {
+      console.log('user en buscarPersona ' + JSON.stringify(user));
+      $http(req).then(function(result) {
+        console.log('Entrar result ' + JSON.stringify(result));
+        console.log('Entrar result id_empresa ' + JSON.stringify(result.data.id_empresa));
+        if (result.data.id_empresa) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
 
-    /* return $q(function(resolve, reject) {
-     if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
-     // Make a request and receive your auth token from your server
-     storeUserCredentials(name + '.yourServerToken');
-     resolve('Login success.');
-     } else {
-     reject('Login Failed.');
-     }
-     });*/
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+  var buscarTipoCita = function(id_empresa_usuario) {
+    console.log('on buscarPersona data: ' + JSON.stringify(id_empresa_usuario));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlTipocita,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_empresa: id_empresa_usuario
+      }
+    }
+    return $q(function(resolve, reject) {
+      $http(req).then(function(result) {
+        console.log('Entrar buscarTipoCita result ' + JSON.stringify(result));
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+  var buscarCitas = function(user, id_empresa_persona) {
+    console.log('on buscarCitas ' + JSON.stringify(user));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlCitas,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_empresa: '1', //esta quemado por que es el unico que recupera citas.
+        identificacion: user.identifier
+      }
+    }
+    return $q(function(resolve, reject) {
+      $http(req).then(function(result) {
+        console.log('Entrar buscarCitas result ' + JSON.stringify(result.data.length));
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
+  }
+
+  var buscarDependencia = function(tipoCita) {
+    console.log('on buscarCitas ' + JSON.stringify(tipoCita));
+    var req = {
+      method: 'POST',
+      url: API_ENDPOINT.urlDependencia,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_tipo_cita: tipoCita
+      }
+    }
+    return $q(function(resolve, reject) {
+      console.log('buscarDependencia ' + JSON.stringify(tipoCita));
+      $http(req).then(function(result) {
+        console.log('Entrar buscarDependencia result ' + JSON.stringify(result));
+        if (result.status == 200) {
+          //storeUserCredentials(result.data);
+          resolve(result.data);
+
+        } else {
+          reject(result.data);
+        }
+      });
+    });
+
   }
 
 
@@ -186,13 +241,14 @@ angular.module('starter.services', [])
     login: login,
     logout: logout,
     buscar: buscar,
-    // state: state,
+    buscarPersona: buscarPersona,
+    buscarTipoCita: buscarTipoCita,
+    buscarCitas: buscarCitas,
+    buscarDependencia: buscarDependencia,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
     },
-    // username: function() {return username;},
-    // role: function() {return role;}
   };
 })
 
@@ -213,27 +269,44 @@ angular.module('starter.services', [])
   $httpProvider.interceptors.push('AuthInterceptor');
 })
 
-/*
-.factory('CitasService', function($resource) {
+.factory("UsuarioGlobal", function() {
+  var infoUsuario = [];
+  var identificacionUser = '';
+  var id_empresa = '';
+
+  /* var interfaz = {
+       user_id: identificacionUser,
+       getDescargas: function(){
+           return infoUsuario;
+       },
+       nuevaDescarga: function(descarga){
+           infoUsuario.push(descarga);
+           id_empresa = descarga;
+       }
+   }
+   return interfaz;*/
+
   return {
-    responseError: function(response) {
-      $rootScope.$broadcast({
-        401: AUTH_EVENTS.notAuthenticated,
-        403: AUTH_EVENTS.notAuthorized
-      }[response.status], response);
-      return $q.reject(response);
+    add: function(data) {
+      id_empresa = data;
+      infoUsuario.push(data);
+    },
+    get: function() {
+      return id_empresa;
+    },
+    remove: function() {
+      id_empresa = '';
     }
   };
-})*/
+})
 
 
 
-/**/
-.factory('Chats', function($http, API_ENDPOINT) {
+.factory('Personas', function($http, API_ENDPOINT) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var chats = [{
+  var personas = [{
     id: 0,
     name: 'Javier Beltran',
     identificacion: '19497896',
@@ -285,15 +358,15 @@ angular.module('starter.services', [])
 
   return {
     all: function() {
-      return chats;
+      return personas;
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
+    remove: function(persona) {
+      personas.splice(personas.indexOf(persona), 1);
     },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    get: function(personaId) {
+      for (var i = 0; i < personas.length; i++) {
+        if (personas[i].id === parseInt(personaId)) {
+          return personas[i];
         }
       }
       return null;

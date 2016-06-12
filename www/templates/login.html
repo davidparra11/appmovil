@@ -10,9 +10,9 @@
         <input type="text" placeholder="Escriba su usuario" ng-model="user.usuario" ng-hide="usuarioInput">
       </label>
       <label class="item item-input item-select" ng-hide="empresaInput" >        
-        <input type="text" placeholder="{{user.empresa}}Seleccione una empresa" ng-model="user.empresa" ng-hide="empresaInput">
+        <input type="text" placeholder="Seleccione una empresa" ng-hide="empresaInput">
         <select name="verificarPassword" id="verificarPassword" ng-model="user.empresa">
-          <option ng-repeat="option in user.empresas" value="{{option.nombre}}">{{option.nombre}}</option>
+          <option ng-repeat="option in user.empresas" value="{{option.id_empresa}}">{{option.nombre}}</option>
         </select>
       </label>
       <label class="item item-input"  ng-hide="passwordLabel">
