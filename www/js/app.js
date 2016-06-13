@@ -30,6 +30,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         url: '/menu',
         abstract: true,
         templateUrl: 'templates/menu.html',
+        cache: false,
         controller: 'MenuCtrl'
       })
       .state('login', {
@@ -65,7 +66,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     $urlRouterProvider.otherwise('/login');
   })
-
 
   .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
