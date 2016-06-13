@@ -61,7 +61,7 @@ angular.module('starter.controllers', [])
 
 
 .controller('DetallesCtrl', function($scope, $stateParams, Personas) {
-  $scope.persona = Personas.get($stateParams.personaId);
+ // $scope.persona = Personas.get($stateParams.personaId);
 })
 
 
