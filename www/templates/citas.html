@@ -36,26 +36,68 @@
        
        <div class="item item-body">
 
-              <label class="item item-input item-select" ng-hide="tipoCitaLabel" >Tipo de citas:       
-              <input type="text" placeholder=" {{citas.descripcion}} Seleccione un tipo" ng-model="citas.id_tipo_cita"  ng-hide="tipoCitaInput">
-              <select name="tipoCita" id="tipoCita" ng-model="citass.id_tipo_cita" ng-change="buscarDependencia(citass.id_tipo_cita)"{{citas.descripcion}}>
+              <label class="item item-input item-select" ng-hide="tipoCitaLabel" >
+              <div class = "input-label">
+      Tipo cita:
+   </div>    
+              
+              <select name="tipoCita" id="tipoCita" ng-model="citas.id_tipo_cita" ng-change="buscarDependencia(citas.id_tipo_cita)"{{citas.descripcion}}>
                 <option ng-repeat="cita in citas" value="{{cita.id_tipo_cita}}">{{cita.descripcion}}</option>
               </select>
             </label>
 
-            <label class="item item-input item-select" ng-hide="dependenciaLabel" >Dependiencia:       
-              <input type="text" placeholder=" {{dependencias.nombre}} Seleccione un tipo" ng-model="dependencias.nombre" ng-hide="dependenciaInput">
-              <select name="tipoCita" id="tipoCita" ng-model="citas.nombre">
+            <label class="item item-input item-select" ng-hide="dependenciaLabel" >
+            <div class = "input-label">
+      Dependencia:
+   </div>           
+
+              <select name="tipoCita" id="tipoCita" ng-model="dependencias.nombre" ng-change="buscarFuncionarios()">
                 <option ng-repeat="dependencia in dependencias" value="{{dependencia.nombre}}">{{dependencia.nombre}}</option>
               </select>
             </label>
             
             <br>
                 <p>
-                  <a href="#" class="subdued"> 0 Agendas</a>
-                  <a href="#" class="subdued"> {{numeroCitas}} Citas</a>
+                  <a href="#tipoCita" class="subdued"> 0 Agendas</a>
+                  <a href="#tipoCita" class="subdued"> {{numeroCitas}} Citas</a>
                 </p>
         </div>
+
+
+        <button class="button button-block button-stable" ng-click="mostrarFuncionarios()" ng-hide="FuncionariosBtn">Mostrar Funcionarios</button>
+
+
+
+          <div class="list" ng-hide="AgendaList">
+
+          <a class="item item-thumbnail-left" href="" >
+      <img ng-src="http://desarrollo.sarcontrolacceso.com/{{fotoFuncionario.foto}}">
+          <h2>{{ fotoFuncionario.nombre_completo }}</h2>
+          <h4>Agenda:</h4>
+          
+        </a>
+
+
+          <a class="item item-icon-left" href="#/menu/detalles/{{key}}" ng-repeat="(key, value) in agendas">
+    <i class="icon ion-calendar"></i>
+    {{ value }}
+    <span class="item-note">
+      Horas
+    </span>
+  </a>
+
+</div>
+
+        <div class="list" ng-hide="FuncionariosList">
+
+    <a class="item item-thumbnail-left" href="" ng-repeat="funcionario in funcionarios" ng-click="buscarAgendas(funcionario.id_empresa_persona)">
+      <img ng-src="http://desarrollo.sarcontrolacceso.com/{{funcionario.foto_thumb}}">
+          <h2>{{ funcionario.nombre_completo }}</h2>
+          
+        </a>
+
+</div>
+
 
     <div class="item item-body">
         <p>
