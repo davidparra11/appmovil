@@ -60,16 +60,19 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('DetallesCtrl', function($scope, $stateParams, Personas) {
-  $scope.persona = Personas.get($stateParams.personaId);
+.controller('DetallesCtrl', function($scope, $stateParams) {
+ // $scope.persona = Personas.get($stateParams.personaId);
 })
 
 
-.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, $ionicHistory, AuthService, Personas, UsuarioGlobal) {
+.controller('MenuCtrl', function($scope, $stateParams, $ionicSideMenuDelegate, $state, $ionicPopup, $ionicHistory, AuthService, UsuarioGlobal) {
   //$scope.chat = Chats.get($stateParams.chatId);
   // $state.go('inside.citas');
   $scope.personaCard = true;
   $scope.numeroCitas = 0;
+  $scope.FuncionariosBtn = true;
+  $scope.AgendaList = true;
+  $scope.FuncionariosList = true;
 
   $ionicHistory.nextViewOptions({
     disableBack: true
@@ -83,7 +86,7 @@ angular.module('starter.controllers', [])
         title: usuario.identifier
       });*/
     //return false;
-    var id_empresa_global = UsuarioGlobal.get();
+     id_empresa_global = UsuarioGlobal.get();
     AuthService.buscarPersona(usuario, id_empresa_global).then(function(msg) {
       console.log('fuciono buscarPersona ' + JSON.stringify(msg));
 
@@ -155,6 +158,7 @@ angular.module('starter.controllers', [])
 
       $scope.dependencias = res;
 
+      
     }, function(errMsg) {
 
       var alertPopup = $ionicPopup.alert({
@@ -162,6 +166,120 @@ angular.module('starter.controllers', [])
         template: errMsg
       });
     });
+  };
+
+
+
+  $scope.buscarFuncionarios = function(idCita) {
+    // $scope.count++;
+    console.log('CITA ' + JSON.stringify(idCita));
+    AuthService.buscarFuncionario(id_empresa_global, $scope.usuario.id_empresa_asignada, $scope.citas.id_tipo_cita).then(function(res) {
+      $scope.FuncionariosList = false;
+      console.log('fuciono buscarFuncionario ' + JSON.stringify(res));
+
+      console.log('msg ' + JSON.stringify(res));
+
+      $scope.funcionarios = res;
+
+      
+
+    }, function(errMsg) {
+      $scope.AgendaList = true;
+      $scope.FuncionariosList = true;
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay fucionarios para este tipo de cita',
+        template: errMsg
+      });
+    });
+  };
+
+
+   $scope.buscarAgendas = function(idEmpresaPersona) {
+    // $scope.count++;
+    console.log('idEmpresaPersona ' + JSON.stringify(idEmpresaPersona));
+    console.log('id_empresa_asignada ' + JSON.stringify( $scope.usuario.id_empresa_asignada));
+    console.log('id_tipo_cita ' + JSON.stringify($scope.citas.id_tipo_cita));
+    AuthService.buscarAgendas(idEmpresaPersona, $scope.citas.id_tipo_cita,  $scope.usuario.id_empresa_asignada).then(function(res) {
+      console.log('fuciono buscarAgendas RES ' + JSON.stringify(res));
+      $scope.FuncionariosList = true;
+      $scope.FuncionariosBtn = false;
+      $scope.AgendaList = false;
+     /* var arrayAgenda = data.toString().split(", ");
+        console.log('array Agenda ' + arrayAgenda);
+        console.log('array Agenda1 ' + arrayAgenda[0]);
+        console.log('array Agenda1 length ' + arrayAgenda[1].length);*/
+      //var sin = res[0].horas.replace(',', 'number');
+      var number = [];
+      var matches = [];
+       var sin = res[0].horas;
+       var arrayAgenda = sin.toString().split(",");
+        console.log('array Agenda ' + arrayAgenda);
+        console.log('array Agenda1 ' + arrayAgenda[0]);
+       var yyy = arrayAgenda;
+      console.log('fuciono buscarAgendas  HORAS ' + JSON.stringify(yyy));
+     /* var asignadas = res[2].horas_asignadas;
+      var asignadasArray = asignadas.toString().split(",");
+        console.log('array Agenda ' + asignadasArray);
+        console.log('array Agenda1 ' + asignadasArray[0]);
+       var zzz = asignadasArray;
+      console.log('fuciono buscarAgendas  HORAS ' + JSON.stringify(zzz));*/
+
+      for (i = 0; i < res.length; i++) {
+           
+              var d = new Date (res[i].fecha * 1000);
+              var days = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+               var months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+                number.push("" + days[ d.getDay()] + " " + d.getDate() + "/" + months[ d.getMonth()] + "/" + d.getFullYear());
+          
+            //console.log('number ' + number.toString());
+
+        };
+        console.log('number ' + JSON.stringify(number));
+        console.log('number ' + number.toString());
+
+     /* for (j = 0; j < zzz.length; j++) {         
+
+            for (i = 0; i < yyy.length; i++) {
+              if (yyy[i] === zzz[j]) {
+                matches.push("Horario ya asignado");
+                j++;
+            } else {
+                
+                matches.push("");
+            } 
+
+            };
+      };*/
+
+
+      console.log('matches ' + JSON.stringify(matches));
+      console.log('msg ' + JSON.stringify(res));
+
+      $scope.fotoFuncionario = res[0];
+      $scope.agendas = number;
+      $scope.horas = yyy;
+
+      //$scope.horas = ["08:00 AM","08:20 AM","08:40 AM","09:00 AM"];
+    //  var sin = res[0].horas.replace('"', '');
+      //$scope.horas = sin;
+
+      
+
+    }, function(errMsg) {
+
+      var alertPopup = $ionicPopup.alert({
+        title: 'Error! No hay Agendas para este tipo de cita',
+        template: errMsg
+      });
+    });
+  };
+
+
+  $scope.mostrarFuncionarios = function() {
+    $scope.FuncionariosList = false;
+      $scope.FuncionariosBtn = true;
+      $scope.AgendaList = true;
+   
   };
 
   $scope.toggleLeft = function() {
@@ -209,7 +327,7 @@ angular.module('starter.controllers', [])
     name: '',
     password: ''
   };
-  $scope.image = "../img/photo1.jpg";
+  $scope.image = "http://desarrollo.sarcontrolacceso.com/assets/images/logosar.png";
   //$scope.option = '';
   $scope.buscarEmpresa = function(user, state) {
 
