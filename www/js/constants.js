@@ -17,6 +17,8 @@ angular.module('starter')
   urlPersonas: 'http://desarrollo.sarcontrolacceso.com/api/example/personas/',
   urlTipocita: 'http://desarrollo.sarcontrolacceso.com/api/example/tipocita/',
   urlDependencia: 'http://desarrollo.sarcontrolacceso.com/api/example/dependencia/',
-  urlCitas: 'http://desarrollo.sarcontrolacceso.com/api/example/citas/'
+  urlCitas: 'http://desarrollo.sarcontrolacceso.com/api/example/citas/',
+  urlFuncionarios: 'http://desarrollo.sarcontrolacceso.com/api/example/funcionarios/',
+  urlAgenda: 'http://desarrollo.sarcontrolacceso.com/api/example/agenda/'
   //  For a simulator use: url: 'http://127.0.0.1:8080/api'
 });

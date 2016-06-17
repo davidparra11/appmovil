@@ -195,7 +195,7 @@ angular.module('starter.services', [])
   }
 
   var buscarDependencia = function(tipoCita) {
-    console.log('on buscarCitas ' + JSON.stringify(tipoCita));
+    console.log('on buscarDependencia ' + JSON.stringify(tipoCita));
     var req = {
       method: 'POST',
       url: API_ENDPOINT.urlDependencia,
@@ -206,13 +206,16 @@ angular.module('starter.services', [])
         id_tipo_cita: tipoCita
       }
     }
+    
     return $q(function(resolve, reject) {
       console.log('buscarDependencia ' + JSON.stringify(tipoCita));
       $http(req).then(function(result) {
         console.log('Entrar buscarDependencia result ' + JSON.stringify(result));
-        if (result.status == 200) {
+        if (result.data.length !== 0 ) {
           //storeUserCredentials(result.data);
           resolve(result.data);
+
+
 
         } else {
           reject(result.data);
@@ -220,7 +223,68 @@ angular.module('starter.services', [])
       });
     });
 
-  }
+  }//buscarFuncionario
+
+
+  var buscarFuncionario = function(idEmpresa, idEmpresaAsignada, idTipoCita) {
+   // console.log('on buscarFuncionario ' + JSON.stringify());
+    var reqFuncionario = {
+      method: 'POST',
+      url: API_ENDPOINT.urlFuncionarios,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_empresa: idEmpresa,
+        id_empresa_asignada: idEmpresaAsignada,
+        id_tipo_cita: idTipoCita
+      }
+    }
+    return $q(function(resolve, reject) {
+      $http(reqFuncionario).then(function(res) {
+                console.log('Entrar buscarFuncionario result ' + JSON.stringify(res));
+                if (res.data.length !== 0 ) {
+                  //storeUserCredentials(result.data);result.data.length !== 0  res.status == 200
+                  resolve(res.data);
+
+
+                    } else {
+                      reject(res.data);
+                    }
+                  });
+      });
+
+  }//buscarAgendas
+
+  var buscarAgendas = function(idEmpresaPersona, idTipoCita, idEmpresaAsignada) {
+   // console.log('on buscarFuncionario ' + JSON.stringify());
+    var reqAgenda = {
+      method: 'POST',
+      url: API_ENDPOINT.urlAgenda,
+      headers: {
+        'id': ''
+      },
+      data: {
+        id_empresa_persona: idEmpresaPersona,
+        id_tipo_cita: idTipoCita,
+        id_empresa_asignada: idEmpresaAsignada
+      }
+    }
+    return $q(function(resolve, reject) {
+      $http(reqAgenda).then(function(res) {
+               // console.log('Entrar buscarAgendas result ' + JSON.stringify(res.data["Johana Marcela Ramirez "].fecha ));
+                if (res.status == 200) {
+                  //storeUserCredentials(result.data);
+                  resolve(res.data);
+
+
+                    } else {
+                      reject(res.data);
+                    }
+                  });
+      });
+
+  }//
 
 
 
@@ -245,6 +309,8 @@ angular.module('starter.services', [])
     buscarTipoCita: buscarTipoCita,
     buscarCitas: buscarCitas,
     buscarDependencia: buscarDependencia,
+    buscarFuncionario: buscarFuncionario,
+    buscarAgendas: buscarAgendas,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {
       return isAuthenticated;
@@ -298,78 +364,7 @@ angular.module('starter.services', [])
       id_empresa = '';
     }
   };
-})
-
-
-
-.factory('Personas', function($http, API_ENDPOINT) {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
-  var personas = [{
-    id: 0,
-    name: 'Javier Beltran',
-    identificacion: '19497896',
-    face: 'img/javier.png',
-    sexo: 'masculino'
-  }, {
-    id: 1,
-    name: 'Danilo Betancourt',
-    identificacion: '9870680',
-    face: 'img/danilo.png',
-    sexo: 'masculino'
-
-  }, {
-    id: 2,
-    name: 'David Parra',
-    identificacion: '1088309083',
-    face: 'img/david.png',
-    sexo: 'masculino'
-
-  }, {
-    id: 3,
-    name: 'Juan Atheortua',
-    identificacion: '1039451685',
-    face: 'img/juan.png',
-    sexo: 'masculino'
-
-  }, {
-    id: 4,
-    name: 'Angela Hernandez',
-    identificacion: '52889831',
-    face: 'img/angela.png',
-    sexo: 'Femenino'
-
-  }, {
-    id: 5,
-    name: 'Roosvel Guinald',
-    identificacion: '89009950',
-    face: 'img/roosvel.png',
-    sexo: 'masculino'
-
-  }, {
-    id: 6,
-    name: 'Claudia Salazar',
-    identificacion: '41936493',
-    face: 'img/claudia.png',
-    sexo: 'Femenino'
-
-  }];
-
-  return {
-    all: function() {
-      return personas;
-    },
-    remove: function(persona) {
-      personas.splice(personas.indexOf(persona), 1);
-    },
-    get: function(personaId) {
-      for (var i = 0; i < personas.length; i++) {
-        if (personas[i].id === parseInt(personaId)) {
-          return personas[i];
-        }
-      }
-      return null;
-    }
-  };
 });
+
+
+
